@@ -22,7 +22,14 @@ document.getElementById('adminForm').addEventListener('submit', function(event){
         //body: JSON.stringify(requestData),
 
     }) //TODO: Possibly add 2fa handling here
-    .then(response => response.text())
+    .then(response => {
+        console.log('Status Code:', response.status); // Print the status code to the console
+        if (response.ok) {
+            return response.text();
+        } else {
+            return response.text().then(text => { throw new Error(text); });
+        }
+    })
     .then(apiKey => {
         console.log(apiKey);
 
