@@ -12,6 +12,8 @@ document.getElementById('adminForm').addEventListener('submit', function(event){
     //     password: password
     // };
 
+
+    // TODO: Change the URL to point to the correct server
     fetch('http://localhost:9090/auth?username=' + username + '&password=' + password, {
         method: 'GET',
         headers: {
@@ -19,13 +21,14 @@ document.getElementById('adminForm').addEventListener('submit', function(event){
         },
         //body: JSON.stringify(requestData),
 
-    })
+    }) //TODO: Possibly add 2fa handling here
     .then(response => response.text())
     .then(apiKey => {
         console.log(apiKey);
 
         localStorage.setItem('apiKey', apiKey);
         // Handle the API token as needed
+        console.log(localStorage.getItem('apiKey'));
     })
     .catch(error => {
         console.error('Error:', error);

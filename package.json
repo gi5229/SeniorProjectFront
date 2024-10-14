@@ -1,0 +1,15 @@
+{
+  "name": "seniorprojectfront",
+  "version": "1.0.0",
+  "description": "TrueNas Front End",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "electron": "^32.2.0"
+  }
+}
