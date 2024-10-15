@@ -1,3 +1,4 @@
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -11,7 +12,7 @@ header {
     text-align: center;
 }
 nav {
-    background-color: #444;
+    background-color: #ffa505;
     overflow: hidden;
 }
 nav a {
@@ -21,19 +22,26 @@ nav a {
     text-align: center;
     padding: 14px 20px;
     text-decoration: none;
+	transition: background-color 0.3s ease;
 }
 nav a:hover {
-    background-color: #555;
+    background-color: #94d2bd;
+	color: #333;
 }
 .container {
     padding: 20px;
+	max-width: 1200px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 footer {
     background-color: #333;
     color: #fff;
     text-align: center;
     padding: 10px 0;
-    position: fixed;
+    position: relative;
     width: 100%;
     bottom: 0;
 }
@@ -48,6 +56,7 @@ footer {
 }
 .admin-container h2 {
     text-align: center;
+	color: #ffa500
 }
 .admin-container label {
     display: block;
@@ -78,6 +87,7 @@ footer {
     margin-top: 15px;
     color: green;
 }
+
 /* Responsive Design */
 @media (max-width: 600px) {
     nav a {
