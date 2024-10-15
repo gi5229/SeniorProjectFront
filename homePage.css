@@ -1,0 +1,146 @@
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f4f4f4;
+	flex-direction: column;
+	height: 100vh;
+}
+header {
+	flex: 1;
+    background-color: #333;
+    color: #fff;
+    padding: 1rem 0;
+    text-align: center;
+}
+nav {
+    background-color: #ffa505;
+    overflow: hidden;
+}
+
+
+nav a {
+    float: left;
+    display: block;
+    color: #fff;
+    text-align: center;
+    padding: 14px 20px;
+    text-decoration: none;
+	transition: background-color 0.3s ease;
+}
+nav a:hover {
+    background-color: #94d2bd;
+	color: #333;
+}
+.container {
+    padding: 20px;
+	max-width: 1200px;
+    margin: 0 auto;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+
+
+footer {
+    background-color: #ffa505;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+    width: 100%;
+	flex: 1;                                                                                                                                                                                                                                                                                                                                                           
+    margin-top: 850px;
+}
+/* Admin Section Styles */
+.admin-container {
+    max-width: 400px;
+    margin: 50px auto;
+    padding: 20px;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+.admin-container h2 {
+    text-align: center;
+	color: #ffa500
+}
+.admin-container label {
+    display: block;
+    margin-bottom: 5px;
+}
+.admin-container input[type="text"],
+.admin-container input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+.admin-container input[type="submit"] {
+    width: 100%;
+    padding: 10px;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+.admin-container input[type="submit"]:hover {
+    background-color: #555;
+}
+.admin-response {
+    text-align: center;
+    margin-top: 15px;
+    color: green;
+}
+
+/* Made the sso button blue (waiting how other groupmates feel about it) */
+.sso-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px; 
+    text-align: center;
+    background-color: #0066cc; 
+    color: white; 
+    text-decoration: none;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; 
+}
+
+.sso-button:active {
+    background-color: #003699; 
+}
+
+.sso-button:focus {
+    outline: none; 
+}
+
+.admin-response {
+    text-align: center;
+    margin-top: 15px;
+    color: green;
+}
+
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    nav a {
+        float: none;
+        width: 100%;
+    }
+    .admin-container {
+        margin: 20px;
+    }
+}
