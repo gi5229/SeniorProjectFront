@@ -1,11 +1,20 @@
+*{
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+
+}
 
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
     background-color: #f4f4f4;
+	flex-direction: column;
+	height: 100vh;
 }
 header {
+	flex: 1;
     background-color: #333;
     color: #fff;
     padding: 1rem 0;
@@ -15,6 +24,8 @@ nav {
     background-color: #ffa505;
     overflow: hidden;
 }
+
+
 nav a {
     float: left;
     display: block;
@@ -36,14 +47,18 @@ nav a:hover {
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+
+
+
 footer {
-    background-color: #333;
+    background-color: #ffa505;
     color: #fff;
     text-align: center;
-    padding: 10px 0;
-    position: relative;
+    padding: 20px 0;
     width: 100%;
-    bottom: 0;
+	flex: 1;                                                                                                                                                                                                                                                                                                                                                           
+    margin-top: 850px;
 }
 /* Admin Section Styles */
 .admin-container {
@@ -87,6 +102,37 @@ footer {
     margin-top: 15px;
     color: green;
 }
+
+/* Made the sso button blue (waiting how other groupmates feel about it) */
+.sso-button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px; 
+    text-align: center;
+    background-color: #0066cc; 
+    color: white; 
+    text-decoration: none;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; 
+}
+
+.sso-button:active {
+    background-color: #003699; 
+}
+
+.sso-button:focus {
+    outline: none; 
+}
+
+.admin-response {
+    text-align: center;
+    margin-top: 15px;
+    color: green;
+}
+
 
 /* Responsive Design */
 @media (max-width: 600px) {
