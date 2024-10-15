@@ -1,0 +1,52 @@
+ <!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Secure Cloud Storage using TrueNAS</title>
+   <!-- CSS Styles -->
+    <link rel="stylesheet" href="./CSS/homePage.css">
+</head>
+<body>
+
+    <!-- Header -->
+    <header>
+        <h1>Admin Login</h1>
+    </header>
+
+ <!-- Navigation Bar -->
+    <nav>
+        <a href="index.html">Home</a>
+        <a href="about.html">About</a>
+		<a href="admin.html">Admin</a>
+    </nav>
+
+    <!-- Admin Section -->
+    <main>
+    <div class="container" id="admin">
+        <div class="admin-container">
+            <h2>Admin Login</h2>
+            <form id="adminForm">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+                
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                
+                <input type="submit" value="Login">
+            </form>
+            <p id="adminResponse" class="admin-response"></p>
+        </div>
+    </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2024 JNPJ </p>
+    </footer>
+
+    <!-- External JavaScript -->
+    <script src="./JS/login.js"></script>
+
+</body>
+</html>
