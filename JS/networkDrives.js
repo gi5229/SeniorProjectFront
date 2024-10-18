@@ -1,23 +1,36 @@
 
-// Might need to find a way to sign into the network drive, not sure yet
-// Check if a network drive is mounted and display its contents
-function mountNetworkDrive(drivePath) {
+
+const fs =require('fs');
+const path = require('path');
+const {exec} =require('child_process');
+
+//Function to mount the network drive and display it's contents 
+function mountNetworkDrive(drivePath,networkDrive) {
     // Check if the drive is already mounted
     if (fs.existsSync(drivePath)) {
         // Display the contents of the mounted drive
         displayDriveContents(drivePath);
     } else {
-        // Attempt to mount the drive using the `net` module
-        // (Implement the mounting logic based on your specific requirements)
-        // ...
-        // If mounting succeeds, display the contents
-        displayDriveContents(drivePath);
+        // Attempt to mount the drive using the `net` module 
+        exec(`net use ${drivePath} ${networkDrive} /USER:username password`,(err)=>{ //replace usr,passwd with actual credentials
+            if(err){
+                console.error(`Error mounting drive: ${err}`);
+                return;
+            }
+            // If mounting succeeds, display the contents
+             displayDriveContents(drivePath);
+
+        });
+        
+        
     }
 }
 
-
-function displayDriveContents(path) {
-    fs.readdir(path, (err, files) => {
+// function to display the contents of the directory
+function displayDriveContents(dirpath) {
+    const ul= document.getElementById('drive-contents');
+    ul.innerHTML = ''; //clears existing content
+    fs.readdir(dirpath, (err, files) => {
         if (err) {
         console.error(err);
         return;
@@ -25,24 +38,25 @@ function displayDriveContents(path) {
 
         // Iterate through the files and directories
         files.forEach(file => {
-        const filePath = path.join(path, file);
+        const filePath = path.join(dirpath, file);
         fs.stat(filePath, (err, stats) => {
             if (err) {
             console.error(err);
             return;
             }
 
-            // Create HTML elements to represent the file or directory
-            // (e.g., using a list or table)
-            // ...
-
+        
+            const li = document.createElement('li');
+            li.textContent = filePath;
+            ul.appendChild(li);
             if (stats.isDirectory()) {
             // Recursively display the contents of the subdirectory
-            displayDriveContents(filePath);
+                displayDriveContents(filePath);
             }
         });
         });
     });
 }
 
-// Add event listener to handle any user clicking in the network drive
+//initialize mounting 
+mountNetworkDrive('Z:', '\\\\server\\share');
