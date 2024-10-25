@@ -1,24 +1,36 @@
-const { app, BrowserWindow } = require('electron');
+const { app, ipcMain, BrowserWindow } = require('electron');
 
-function createWindow () { 
-    const win = new BrowserWindow({
-        width: 1920,
-        height: 1080,
-        minWidth: 800,
-        minHeight: 600,
-        webPreferences: {
-        nodeIntegration: true
-        }
-    })
-    
-    win.loadFile('index.html');
+const { createAuthWindow, createLogoutWindow } = require('./main/auth-process');
+const createAppWindow = require('./main/app-process');
+const authService = require('./services/auth-service');
+const apiService = require('./services/api-service');
+
+async function showWindow() {
+  try {
+    await authService.refreshTokens();
+    createAppWindow();
+  } catch (err) {
+    createAuthWindow();
+  }
 }
 
+// This method will be called when Electron has finished
+// initialization and is ready to create browser windows.
+// Some APIs can only be used after this event occurs.
+app.on('ready', () => {
+  // Handle IPC messages from the renderer process.
+  ipcMain.handle('auth:get-profile', authService.getProfile);
+  ipcMain.handle('api:get-private-data', apiService.getPrivateData);
+  ipcMain.on('auth:log-out', () => {
+    BrowserWindow.getAllWindows().forEach(window => window.close());
+    createLogoutWindow();
+  });
 
-app.whenReady().then(createWindow);
+  showWindow();
+});
 
+// Quit when all windows are closed.
 app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit();
-    } 
-})
+  app.quit();
+});
+
