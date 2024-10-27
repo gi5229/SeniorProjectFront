@@ -25,6 +25,7 @@ app.on('ready', () => {
     BrowserWindow.getAllWindows().forEach(window => window.close());
     createLogoutWindow();
   });
+  ipcMain.handle('auth:get-access-token', authService.getAccessToken);
 
   showWindow();
 });

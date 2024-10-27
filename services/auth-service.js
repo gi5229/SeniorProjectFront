@@ -26,6 +26,10 @@ function getProfile() {
   return profile;
 }
 
+function getRefreshToken() {
+  return refreshToken;
+}
+
 function getAuthenticationURL() {
   return (
     "https://" +
@@ -103,6 +107,65 @@ async function loadTokens(callbackURL) {
     if (refreshToken) {
       await keytar.setPassword(keytarService, keytarAccount, refreshToken);
     }
+
+    if (query.signup) {
+      console.log('User has just signed up');
+      // TODO: Create the user in the Truenas and set the refresh token as the user password
+      //  Post request to truenas to create user with json: https://73.161.236.103/api/v2.0/user
+      // const truenasUserOptions = {
+      //   method: 'POST',
+      //   url: 'https://73.161.236.103/api/v2.0/user',
+      //   headers: {
+      //     'Content-Type': 'application/json'
+      //   },
+      //   data: {
+      //     username: profile.nickname,
+      //     password: refreshToken,
+      //     email: profile.email,
+      //     full_name: profile.name,
+
+
+      //     // TODO: Get the uid from the mysql database
+      //     uid: profile.sub, // This is the user id from the auth
+      //     username: profile.email,
+      //     group: 0,
+      //     group_create: false,
+      //     home: "string",
+      //     "home_mode": "string",
+      //     "shell": "string",
+      //     "full_name": "string",
+      //     "email": "string",
+      //     "password": "string",
+      //     "password_disabled": true,
+      //     "locked": true,
+      //     "microsoft_account": true,
+      //     "smb": true,
+      //     "sudo": true,
+      //     "sudo_nopasswd": true,
+      //     "sudo_commands": [
+      //       "string"
+      //     ],
+      //     "sshpubkey": "string",
+      //     "groups": [
+      //       null
+      //     ],
+      //     "attributes": {
+      //       "additionalProp1": {}
+      //     },
+      //   }
+      // };
+
+      try {
+        const truenasResponse = await axios(truenasUserOptions);
+        console.log('User created in Truenas:', truenasResponse.data);
+      } catch (truenasError) {
+        console.error('Error creating user in Truenas:', truenasError);
+      }
+
+    } else {
+      console.log('User has logged in');
+      // TODO: Set the refresh token as the user password in the Truenas
+    }
   } catch (error) {
     await logout();
 
@@ -123,6 +186,7 @@ function getLogOutUrl() {
 
 module.exports = {
   getAccessToken,
+  getRefreshToken,
   getAuthenticationURL,
   getLogOutUrl,
   getProfile,
