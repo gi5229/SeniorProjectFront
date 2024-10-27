@@ -3,44 +3,38 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Files Dashboard</title>
-    <!-- CSS Styles -->
-    <link rel="stylesheet" href="./CSS/homePage.css">
+    <title>Files - JNPJ Secure Cloud Storage</title>
+<link rel="stylesheet" href="../CSS/main.css">
 </head>
 <body>
-
-	
-    <!-- Header Section -->
-    <header>
-        <h1>User Files </h1>
-    </header>
-
-    <!-- Navigation Bar -->
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-		<a href="admin.html">Admin</a>
-		<a href="files.html">Files</a>
+    <nav class="navbar">
+        <div class="nav-brand">JNPJ - Secure Cloud</div>
+        <ul class="nav-links">
+            <li><a href="home.html">Home</a></li>
+            <li><a href="files.html" class="active">Files</a></li>
+            <li><a href="share.html">Share Drive</a></li>
+            <li><a href="usage.html">Usage</a></li>
+            <li><a href="account.html">Account</a></li>
+            <li><a href="about.html">About</a></li>
+            <li><a href="#" class="logout-btn">Logout</a></li>
+        </ul>
     </nav>
 
-    <!-- Main Content -->
-    <div class="container" id="home">
-        <h2>Your Available Files</h2>
-    </div>
+    <main class="container">
+        <h1>User Files</h1>
+        <section id="files" class="section">
+            <h2>Your Available Files</h2>
+            <div class="login-prompt">
+                <h3>Login to see user files.</h3>
+            </div>
+        </section>
+    </main>
 
-
-
- <div class="container" id="home">
-        <h3>Login to see advanced file settings.</h3>
-    </div>
-
-    <!-- Footer Section -->          
-    <footer>
-        <p>&copy; 2024 JNPJ </p>
+    <footer class="footer">
+        <p>© 2024 JNPJ</p>
     </footer>
-
-  
-    <script src="./JS/login.js"></script>
-
+	 <!-- External JavaScript -->
+ <script src="./JS/login.js"></script>
+	
 </body>
 </html>
