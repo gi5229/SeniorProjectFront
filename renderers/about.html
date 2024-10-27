@@ -3,30 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Us - JNPJ Secure Cloud Storage using TrueNAS</title>
-   <!-- CSS Styles -->
-    <link rel="stylesheet" href="./CSS/homePage.css">
+    <title>About - JNPJ Secure Cloud Storage using TrueNAS</title>
+    <link rel="stylesheet" href="../CSS/main.css">
 </head>
 <body>
-
-    <!-- Header -->
-    <header>
-        <h1>About our Secure Cloud Storage</h1>
-    </header>
-
-<!-- Navigation Bar -->
-    <nav>
-        <a href="index.html">Home</a>
-        <a href="about.html">About</a>
-		<a href="admin.html">Admin</a>
+     <nav class="navbar">
+        <div class="nav-brand">JNPJ - Secure Cloud</div>
+        <ul class="nav-links">
+            <li><a href="home.html">Home</a></li>
+            <li><a href="files.html">Files</a></li>
+            <li><a href="share.html">Share Drive</a></li>
+            <li><a href="usage.html">Usage</a></li>
+            <li><a href="account.html">Account</a></li>
+            <li><a href="about.html" class="active">About</a></li>
+            <li><a href="#" class="logout-btn">Logout</a></li>
+        </ul>
     </nav>
-
-
-    <!-- Main Content -->
     <main>
-        <!-- About -->
         <section class="container" id="about">
-            <h2>About Our Cloud Storage Solutions</h2>
+            <h2>About Our Secure Cloud Storage Solutions</h2>
             <p>Our goal for this project is to provide secure and reliable cloud storage solutions using TrueNAS. Whether you're faculty or a student, we offer encrypted storage services designed to meet everyday data file storage.</p>
 
             <h3>What is TrueNAS?</h3>
@@ -35,19 +30,17 @@
             <h3>Why Choose Us?</h3>
             <ul>
                 <li><strong>Security:</strong> We use TrueNAS to encrypt your data, ensuring that your files are safe from bad actors.</li>
-                <li><strong>Scalability:</strong> Data takes enourmous amount of storage and it only continues to grow, our storage solutions can easily scale to meet increasing storage requirements.</li>
+                <li><strong>Scalability:</strong> Data takes enormous amount of storage and it only continues to grow, our storage solutions can easily scale to meet increasing storage requirements.</li>
                 <li><strong>Reliability:</strong> With TrueNAS's data backup features, data is always available and protected against hardware failures.</li>
             </ul>
         </section>
     </main>
 
-    <!-- Footer Section -->
     <footer>
         <p>&copy; 2024 JNPJ</p>
     </footer>
 
     <!-- External JavaScript -->
-    <script src="./JS/login.js"></script>
-
+     <script src="./JS/login.js"></script>
 </body>
 </html>
