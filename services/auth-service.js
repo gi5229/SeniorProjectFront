@@ -110,50 +110,32 @@ async function loadTokens(callbackURL) {
 
     if (query.signup) {
       console.log('User has just signed up');
-      // TODO: Create the user in the Truenas and set the refresh token as the user password
       //  Post request to truenas to create user with json: https://73.161.236.103/api/v2.0/user
-      // const truenasUserOptions = {
-      //   method: 'POST',
-      //   url: 'https://73.161.236.103/api/v2.0/user',
-      //   headers: {
-      //     'Content-Type': 'application/json'
-      //   },
-      //   data: {
-      //     username: profile.nickname,
-      //     password: refreshToken,
-      //     email: profile.email,
-      //     full_name: profile.name,
-
-
-      //     // TODO: Get the uid from the mysql database
-      //     uid: profile.sub, // This is the user id from the auth
-      //     username: profile.email,
-      //     group: 0,
-      //     group_create: false,
-      //     home: "string",
-      //     "home_mode": "string",
-      //     "shell": "string",
-      //     "full_name": "string",
-      //     "email": "string",
-      //     "password": "string",
-      //     "password_disabled": true,
-      //     "locked": true,
-      //     "microsoft_account": true,
-      //     "smb": true,
-      //     "sudo": true,
-      //     "sudo_nopasswd": true,
-      //     "sudo_commands": [
-      //       "string"
-      //     ],
-      //     "sshpubkey": "string",
-      //     "groups": [
-      //       null
-      //     ],
-      //     "attributes": {
-      //       "additionalProp1": {}
-      //     },
-      //   }
-      // };
+      const truenasUserOptions = {
+        method: 'POST',
+        url: 'https://73.161.236.103/api/v2.0/user',
+        headers: {
+          'Content-Type': 'application/json',
+          'bearer': '1-Pwk10vh0qDJfj1Hk6lhqGhAEqHe0ny3DpDWDNVcZI8Uaw3NTsdPckPeVpqZXLCcB'
+        },
+        data: {
+          // TODO: Get the uid from the mysql database
+          uid: 1100, 
+          username: profile.nickname,
+          group: 46, // ID of the group, not the gid
+          "group_create": false,
+          "home": "/mnt/jnpj/" + profile.nickname,
+          "home_mode": "0777",
+          "shell": "/bin/sh",
+          "full_name": profile.nickname,
+          "password": refreshToken,
+          "password_disabled": false,
+          "locked": false,
+          "microsoft_account": false,
+          "smb": true,
+          "sudo": false,
+        }
+      };
 
       try {
         const truenasResponse = await axios(truenasUserOptions);
