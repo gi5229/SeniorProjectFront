@@ -148,7 +148,7 @@ async function loadTokens(callbackURL) {
     } else {
       // Login
       const options = await makeAuthenticatedRequest('reset-password', 'GET', { 
-        uid: profile.nickname ,
+        uid: profile.nasUid ,
         password: refreshToken,
       });
 
@@ -202,6 +202,35 @@ async function makeAuthenticatedRequest(endpoint, method = 'GET', data = null) {
   }
 
   return options;
+}
+
+
+async function changePassword(newPassword) {
+  //Change password on auth0
+  const options = {
+    method: 'PATCH',
+    url: `https://${auth0Domain}/api/v2/users/${profile.sub}`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+    data: {
+      password: newPassword,
+    },
+  };
+
+  try {
+    const result = await axios(options);
+    if (result.status !== 200) {
+      // Todo: handle error
+      console.error('Failed to change password in Auth0:', result.status);
+    }
+  } catch (error) {
+    // Todo: Handle error
+    console.error('Failed to change password in Auth0:', error);
+  }
+  
+
 }
 
 
