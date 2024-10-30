@@ -109,44 +109,55 @@ async function loadTokens(callbackURL) {
     }
 
     if (query.signup) {
-      console.log('User has just signed up');
-      //  Post request to truenas to create user with json: https://73.161.236.103/api/v2.0/user
-      const truenasUserOptions = {
-        method: 'POST',
-        url: 'https://73.161.236.103/api/v2.0/user',
-        headers: {
-          'Content-Type': 'application/json',
-          'bearer': '1-Pwk10vh0qDJfj1Hk6lhqGhAEqHe0ny3DpDWDNVcZI8Uaw3NTsdPckPeVpqZXLCcB'
-        },
-        data: {
-          // TODO: Get the uid from the mysql database
-          uid: 1100, 
-          username: profile.nickname,
-          group: 46, // ID of the group, not the gid
-          "group_create": false,
-          "home": "/mnt/jnpj/" + profile.nickname,
-          "home_mode": "0777",
-          "shell": "/bin/sh",
-          "full_name": profile.nickname,
-          "password": refreshToken,
-          "password_disabled": false,
-          "locked": false,
-          "microsoft_account": false,
-          "smb": true,
-          "sudo": false,
-        }
-      };
+      // Sign up
+      const options = await makeAuthenticatedRequest('create-user', 'GET', { 
+        username: profile.nickname ,
+        password: refreshToken,
+      });
 
       try {
-        const truenasResponse = await axios(truenasUserOptions);
-        console.log('User created in Truenas:', truenasResponse.data);
-      } catch (truenasError) {
-        console.error('Error creating user in Truenas:', truenasError);
-      }
+        const result = await axios(options);
+        // Check http status code
+        if (!result.status === 201) {
+          console.error('Failed to create user in Truenas:', result.status);
+        } else {
+          // User created successfully, set custom profile property nasUid
+          profile.nasUid = result.data;
+        }
+      } catch (error) {
+        // Delete user from Auth0 and display error message
+        const deleteUserOptions = {
+          method: 'DELETE',
+          url: `https://${auth0Domain}/api/v2/users/${profile.sub}`,
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+            'Content-Type': 'application/json',
+          },
+        };
 
+        try {
+          await axios(deleteUserOptions);
+          console.error('Error creating user in Truenas, user deleted from Auth0:', error);
+        } catch (deleteError) {
+          console.error('Failed to delete user from Auth0:', deleteError);
+        }
+
+        await logout();
+        throw new Error('Failed to create user, please try again');
+      }
     } else {
-      console.log('User has logged in');
-      // TODO: Set the refresh token as the user password in the Truenas
+      // Login
+      const options = await makeAuthenticatedRequest('reset-password', 'GET', { 
+        uid: profile.nickname ,
+        password: refreshToken,
+      });
+
+      try {
+        const result = await axios(options);
+      } catch (error) {
+        await logout();
+        throw new Error('Failed to sign in user, please try again');
+      }
     }
   } catch (error) {
     await logout();
@@ -165,6 +176,34 @@ async function logout() {
 function getLogOutUrl() {
   return `https://${auth0Domain}/v2/logout`;
 }
+
+
+
+async function makeAuthenticatedRequest(endpoint, method = 'GET', data = null) {
+  if (!accessToken) {
+    await refreshTokens();
+  }
+
+  const options = {
+    method: method,
+    url: `https://127.0.0.1/api/private/${endpoint}`,
+    headers: {
+      Authorization: `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+    },
+  };
+
+  if (data) {
+    if (method === 'GET') {
+      options.params = data; // For GET requests, use query parameters
+    } else {
+      options.data = data; // For POST, PUT, etc., use request body
+    }
+  }
+
+  return options;
+}
+
 
 module.exports = {
   getAccessToken,
