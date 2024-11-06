@@ -1,5 +1,5 @@
 {
-    "auth0Domain": "jnpj.us.auth0.com",
-    "clientId": "b2SfkjsfmhX4btNQmQDB7dCa2IDveOUP",
-    "apiIdentifier": "<API_IDENTIFIER>"
+  "apiIdentifier": "https://jnpj-api",
+  "auth0Domain": "jnpj-secure-cloud-storage.us.auth0.com",
+  "clientId": "5ToNZpt7RjobuSqfpp383quwgnwC17yH"
 }

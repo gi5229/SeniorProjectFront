@@ -21,11 +21,12 @@ app.on('ready', () => {
   // Handle IPC messages from the renderer process.
   ipcMain.handle('auth:get-profile', authService.getProfile);
   ipcMain.handle('api:get-private-data', apiService.getPrivateData);
+  
   ipcMain.on('auth:log-out', () => {
+    console.log('logout');
     BrowserWindow.getAllWindows().forEach(window => window.close());
     createLogoutWindow();
   });
-  ipcMain.handle('auth:get-access-token', authService.getAccessToken);
 
   showWindow();
 });
@@ -34,4 +35,3 @@ app.on('ready', () => {
 app.on('window-all-closed', () => {
   app.quit();
 });
-

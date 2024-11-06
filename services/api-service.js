@@ -7,6 +7,8 @@ async function getPrivateData() {
       'Authorization': `Bearer ${authService.getAccessToken()}`,
     },
   });
+  // Example of how to log the status code of the response
+  console.log(`Status Code: ${result.status}`);
   return result.data;
 }
 

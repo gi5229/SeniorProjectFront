@@ -10,11 +10,10 @@
      <nav class="navbar">
         <div class="nav-brand">JNPJ - Secure Cloud</div>
         <div class="nav-profile">
-            <span id="name" class="user-name"></span>
             <ul class="nav-links">
                 <li><a href="home.html" >Home</a></li>
                 <li><a href="files.html">Files</a></li>
-                <li><a href="share.html">Share Drive</a></li>
+                <!--<li><a href="share.html">Share Drive</a></li>-->
                 <li><a href="usage.html"class="active">Usage</a></li>
                 <li><a href="account.html">Account</a></li>
                 <li><a href="about.html">About</a></li>
@@ -42,18 +41,6 @@
                     <p class="metric-value" id="availableSpace">Loading...</p>
                 </div>
             </div>
-
-            <div class="usage-graph">
-                <h2>Usage Over Time</h2>
-                <canvas id="usageChart"></canvas>
-            </div>
-
-            <div class="share-usage">
-                <h2>Share Drive Usage</h2>
-                <div class="share-usage-list" id="shareUsageList">
-                    <!-- Share usage items will be populated here -->
-                </div>
-            </div>
         </section>
     </main>
 
@@ -62,6 +49,6 @@
     </footer>
 
   <!-- Add External JavaScript Here -->
- 
+  <script src="base.js"></script>
 </body>
 </html>

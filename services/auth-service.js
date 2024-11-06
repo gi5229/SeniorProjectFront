@@ -1,9 +1,8 @@
 const jwtDecode = require('jwt-decode');
-console.log(typeof jwtDecode);
-
 const axios = require('axios');
 const url = require('url');
 const envVariables = require('../env-variables');
+const { BrowserWindow } = require('electron');
 const keytar = require('keytar');
 const os = require('os');
 
@@ -14,41 +13,50 @@ const redirectUri = 'http://localhost/callback';
 const keytarService = 'electron-openid-oauth';
 const keytarAccount = os.userInfo().username;
 
+// TODO: Remove special console log later
+var nodeConsole = require('console');
+var myConsole = new nodeConsole.Console(process.stdout, process.stderr);
+
+
+
+
 let accessToken = null;
 let profile = null;
 let refreshToken = null;
+let uid = null;
+let drive = null;
 
 function getAccessToken() {
   return accessToken;
-}
-
-function getProfile() {
-  return profile;
 }
 
 function getRefreshToken() {
   return refreshToken;
 }
 
+function getProfile() {
+  return profile;
+}
+
+function getUid() {
+  return uid;
+}
+
+function getDrive() {
+  return drive;
+}
+
 function getAuthenticationURL() {
-  return (
-    "https://" +
-    auth0Domain +
-    "/authorize?" +
-    "scope=openid profile offline_access&" +
-    "response_type=code&" +
-    "client_id=" +
-    clientId +
-    "&" +
-    "redirect_uri=" +
-    redirectUri
-  );
+  return 'https://' + auth0Domain + '/authorize?' +
+    'audience=' + apiIdentifier + '&' +
+    'scope=openid profile offline_access&' +
+    'response_type=code&' +
+    'client_id=' + clientId + '&' +
+    'redirect_uri=' + redirectUri;
 }
 
 async function refreshTokens() {
-    
   const refreshToken = await keytar.getPassword(keytarService, keytarAccount);
-  
 
   if (refreshToken) {
     const refreshOptions = {
@@ -107,62 +115,43 @@ async function loadTokens(callbackURL) {
     if (refreshToken) {
       await keytar.setPassword(keytarService, keytarAccount, refreshToken);
     }
-
-    if (query.signup) {
-      // Sign up
-      const options = await makeAuthenticatedRequest('create-user', 'GET', { 
-        username: profile.nickname ,
-        password: refreshToken,
-      });
-
-      try {
-        const result = await axios(options);
-        // Check http status code
-        if (!result.status === 201) {
-          console.error('Failed to create user in Truenas:', result.status);
-        } else {
-          // User created successfully, set custom profile property nasUid
-          profile.nasUid = result.data;
-        }
-      } catch (error) {
-        // Delete user from Auth0 and display error message
-        const deleteUserOptions = {
-          method: 'DELETE',
-          url: `https://${auth0Domain}/api/v2/users/${profile.sub}`,
-          headers: {
-            Authorization: `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-          },
-        };
-
-        try {
-          await axios(deleteUserOptions);
-          console.error('Error creating user in Truenas, user deleted from Auth0:', error);
-        } catch (deleteError) {
-          console.error('Failed to delete user from Auth0:', deleteError);
-        }
-
-        await logout();
-        throw new Error('Failed to create user, please try again');
-      }
-    } else {
-      // Login
-      const options = await makeAuthenticatedRequest('reset-password', 'GET', { 
-        uid: profile.nasUid ,
-        password: refreshToken,
-      });
-
-      try {
-        const result = await axios(options);
-      } catch (error) {
-        await logout();
-        throw new Error('Failed to sign in user, please try again');
-      }
-    }
   } catch (error) {
     await logout();
 
     throw error;
+  }
+
+  //myConsole.log('profile: ' + JSON.stringify(profile));
+  if(profile.uid === 0) {
+    try {
+      myConsole.log(profile.user_id);
+      const data = await axios.post('http://localhost:3000/createuser', {
+        nickname: profile.nickname,
+        refreshToken: `${getRefreshToken()}`,
+        authUserId: profile.user_id,
+      }, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      });
+      myConsole.log(data.status);
+      
+      if (data.status === 200) {
+        uid = data.data.uid;
+        drive = profile.nickname;
+        myConsole.log('uid: ' + uid);
+        myConsole.log('drive: ' + drive);
+      } else {
+        myConsole.log(data);
+        await createLogoutWindow();
+        //throw new Error('Failed to create user in cloud storage. Please close and reopen the app, and try signing in. If this persists, please contact support at jacobreich404@gmail.com');
+      }
+    } catch (error) { // TODO: This is currently catching the 500 status code error, This needs to be handled here. The 200 if statement is currently only hit if the user is created successfully so it can be dropped and all errors handled here.
+      myConsole.log(error);
+      myConsole.log(error.status);
+      //await createLogoutWindow();
+      //throw error;
+    }
   }
 }
 
@@ -171,76 +160,41 @@ async function logout() {
   accessToken = null;
   profile = null;
   refreshToken = null;
+
+  // Close all windows
+  BrowserWindow.getAllWindows().forEach(window => window.close());
+
+  // Create the logout window
+  //createLogoutWindow();
+}
+
+// TODO: Add a popup to let the user know about the error and do not let them interact with the app, close the app after the popup is closed/confirmed
+function createLogoutWindow() {
+  const logoutWindow = new BrowserWindow({
+    show: false,
+  });
+
+  logoutWindow.loadURL(getLogOutUrl());
+
+  logoutWindow.on('ready-to-show', async () => {
+    await logout();
+    logoutWindow.close();
+  });
 }
 
 function getLogOutUrl() {
   return `https://${auth0Domain}/v2/logout`;
 }
 
-
-
-async function makeAuthenticatedRequest(endpoint, method = 'GET', data = null) {
-  if (!accessToken) {
-    await refreshTokens();
-  }
-
-  const options = {
-    method: method,
-    url: `https://127.0.0.1/api/private/${endpoint}`,
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-    },
-  };
-
-  if (data) {
-    if (method === 'GET') {
-      options.params = data; // For GET requests, use query parameters
-    } else {
-      options.data = data; // For POST, PUT, etc., use request body
-    }
-  }
-
-  return options;
-}
-
-
-async function changePassword(newPassword) {
-  //Change password on auth0
-  const options = {
-    method: 'PATCH',
-    url: `https://${auth0Domain}/api/v2/users/${profile.sub}`,
-    headers: {
-      Authorization: `Bearer ${accessToken}`,
-      'Content-Type': 'application/json',
-    },
-    data: {
-      password: newPassword,
-    },
-  };
-
-  try {
-    const result = await axios(options);
-    if (result.status !== 200) {
-      // Todo: handle error
-      console.error('Failed to change password in Auth0:', result.status);
-    }
-  } catch (error) {
-    // Todo: Handle error
-    console.error('Failed to change password in Auth0:', error);
-  }
-  
-
-}
-
-
 module.exports = {
   getAccessToken,
-  getRefreshToken,
   getAuthenticationURL,
   getLogOutUrl,
   getProfile,
   loadTokens,
   logout,
   refreshTokens,
+  getRefreshToken,
+  getUid,
+  getDrive,
 };
