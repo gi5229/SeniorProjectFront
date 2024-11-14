@@ -5,6 +5,8 @@ const envVariables = require('../env-variables');
 const { BrowserWindow } = require('electron');
 const keytar = require('keytar');
 const os = require('os');
+const { exec } = require('child_process'); 
+
 
 const {apiIdentifier, auth0Domain, clientId} = envVariables;
 
@@ -25,6 +27,7 @@ let profile = null;
 let refreshToken = null;
 let uid = null;
 let drive = null;
+
 
 function getAccessToken() {
   return accessToken;
@@ -111,6 +114,7 @@ async function loadTokens(callbackURL) {
     accessToken = response.data.access_token;
     profile = jwtDecode(response.data.id_token);
     refreshToken = response.data.refresh_token;
+    
 
     if (refreshToken) {
       await keytar.setPassword(keytarService, keytarAccount, refreshToken);
@@ -121,11 +125,10 @@ async function loadTokens(callbackURL) {
     throw error;
   }
 
-  //myConsole.log('profile: ' + JSON.stringify(profile));
   if(profile.uid === 0) {
     try {
       myConsole.log(profile.user_id);
-      const data = await axios.post('http://localhost:3000/createuser', {
+      const data = await axios.post('http://localhost:3000/create-user', {
         nickname: profile.nickname,
         refreshToken: `${getRefreshToken()}`,
         authUserId: profile.user_id,
@@ -134,13 +137,10 @@ async function loadTokens(callbackURL) {
           'Authorization': `Bearer ${accessToken}`,
         },
       });
-      myConsole.log(data.status);
       
-      if (data.status === 200) {
+      if (data.status == 200) {
         uid = data.data.uid;
         drive = profile.nickname;
-        myConsole.log('uid: ' + uid);
-        myConsole.log('drive: ' + drive);
       } else {
         myConsole.log(data);
         await createLogoutWindow();
@@ -149,11 +149,105 @@ async function loadTokens(callbackURL) {
     } catch (error) { // TODO: This is currently catching the 500 status code error, This needs to be handled here. The 200 if statement is currently only hit if the user is created successfully so it can be dropped and all errors handled here.
       myConsole.log(error);
       myConsole.log(error.status);
-      //await createLogoutWindow();
+      await createLogoutWindow();
       //throw error;
     }
+  } else {
+    //TODO: Reset the users truenas password with the refresh token
+    try {
+      const data = await axios.put('http://localhost:3000/set-password', {
+        uid: profile.uid,
+      }, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      });
+
+      if (data.status != 200) {
+        myConsole.log(data);
+        await createLogoutWindow();
+        //throw new Error('Failed to create user in cloud storage. Please close and reopen the app, and try signing in. If this persists, please contact support at jacobreich404@gmail.com');
+      } 
+    } catch (error) { // TODO: This is currently catching the 500 status code error, This needs to be handled here. The 200 if statement is currently only hit if the user is created successfully so it can be dropped and all errors handled here.
+      myConsole.log(error);
+      myConsole.log(error.status);
+      await createLogoutWindow();
+      //throw error;
+
+    }
+  }
+
+  /*
+  if(!profile.limited) {
+    try {
+      const data = await axios.post('http://localhost:3000/set-user-size', {
+        uid: profile.uid,
+        password: refreshToken,
+      }, {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      });
+    } catch (error) { // TODO: This is currently catching the 500 status code error, This needs to be handled here. The 200 if statement is currently only hit if the user is created successfully so it can be dropped and all errors handled here.
+      myConsole.log(error);
+      myConsole.log(error.status);
+      await createLogoutWindow();
+      //throw error;
+
+    }
+  }
+    */
+}
+
+
+async function createDrive(driveName) {
+  myConsole.log("Drive object name: " + driveName);
+  try {
+    const data = await axios.post('http://localhost:3000/create-drive', {
+      drive: profile.drive,
+      dataSetName: driveName,
+      authUserId: profile.user_id,
+    }, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    });
+
+    if (data.status != 200) {
+      //myConsole.log(data);
+      
+      //throw new Error('Failed to create user in cloud storage. Please close and reopen the app, and try signing in. If this persists, please contact support at
+    }
+    refreshTokens();
+  }
+  catch (error) {
+    //myConsole.log(error);
+    //myConsole.log(error.status);
+    
+    //throw error;
   }
 }
+
+async function mountDrive(driveLetter, dataset) {
+  
+  myConsole.log(`Mounting drive: ${driveLetter} for dataset: ${dataset}`);
+    const command = `net use ${driveLetter}: \\\\10.0.0.246\\jnpj\\${dataset} /user:${profile.drive} ${refreshToken} /persistent:no`;
+    exec(command, (error, stdout, stderr) => {
+      if (error) {
+        myConsole.error(`Error mounting drive: ${error.message}`);
+          return;
+      }
+      if (stderr) {
+        myConsole.error(`Error: ${stderr}`);
+          return;
+      }
+      myConsole.log(`Drive mounted successfully: ${stdout}`);
+    }
+  );
+
+}
+
+
 
 async function logout() {
   await keytar.deletePassword(keytarService, keytarAccount);
@@ -197,4 +291,6 @@ module.exports = {
   getRefreshToken,
   getUid,
   getDrive,
+  createDrive,
+  mountDrive,
 };
