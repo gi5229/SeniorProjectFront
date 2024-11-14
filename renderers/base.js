@@ -20,7 +20,10 @@ document.getElementById('logout').onclick = () => {
 // };
 
 
+
+
 document.getElementById('hamburger-menu').addEventListener('click', function() {
+  this.classList.toggle('open');
   document.getElementById('nav-profile').classList.toggle('open');
 });
 
