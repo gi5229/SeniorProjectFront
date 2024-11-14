@@ -5,6 +5,7 @@
     --accent-color: #ff8c55;      
     --text-color: #ffffff;
     --background-color: #2a2a2a; 
+    --dark-background-color: #1a1a1a;
     --surface-color: #333333;     
     --error-color: #ff3333;       
     --success-color: #4caf50;    
@@ -45,7 +46,7 @@ main {
     left: 0;
     width: 50px;
     height: 100vh;
-    background-color: var(--surface-color);
+    background-color:  var(--dark-background-color);
     z-index: 1; /* Ensure the strip is below the hamburger button and menu */
 }
 
@@ -71,16 +72,16 @@ main {
     transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-.hamburger-menu.open span:nth-child(1) {
-    transform: rotate(45deg) translate(5px, 5px);
+.hamburger-menu.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
 }
 
-.hamburger-menu.open span:nth-child(2) {
-    opacity: 0;
+.hamburger-menu.active span:nth-child(2) {
+  opacity: 0;
 }
 
-.hamburger-menu.open span:nth-child(3) {
-    transform: rotate(-45deg) translate(5px, -5px);
+.hamburger-menu.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
 }
 
 .nav-profile {
@@ -262,7 +263,7 @@ p {
     padding: 1rem;
     background-color: var(--surface-color);
     margin-top: auto;
-    z-index: 1000;
+    z-index: 0;
 }
 
 /* Profile Section */
@@ -448,6 +449,16 @@ a:hover {
     padding-bottom: 40px;
     height: 40px;
     width: 100%;
-    background-color: var(--surface-color);
+    background-color: var(--dark-background-color);
     z-index: 1000;
+}
+
+
+/* Dynamic Style */
+#content {
+    opacity: 1;
+    transition: opacity 0.5s ease-in-out;
+}
+#content.fade-out {
+    opacity: 0;
 }

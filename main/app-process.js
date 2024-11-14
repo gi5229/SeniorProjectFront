@@ -9,7 +9,7 @@ function createAppWindow() {
     titleBarStyle: 'hidden',
     frame: false,
     titleBarOverlay: {
-      color: '#333333',
+      color: '#1a1a1a',
       symbolColor: '#ff6b2b',
       height: 60
     },

@@ -1,63 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Storage Usage - JNPJ Secure Cloud Storage</title>
-    <link rel="stylesheet" href="../CSS/main.css">
-</head>
-<body>
-    <div class="custom-title-bar drag">
-        <span class="app-title no-drag">JNPJ - Secure Cloud</span> 
+
+<section class="section">
+    <h1>Storage Usage Overview</h1>
+    
+    <div class="usage-summary">
+        <div class="usage-metric">
+            <h3>Total Space</h3>
+            <p class="metric-value" id="totalSpace">Loading...</p>
+        </div>
+        <div class="usage-metric">
+            <h3>Used Space</h3>
+            <p class="metric-value" id="usedSpace">Loading...</p>
+        </div>
+        <div class="usage-metric">
+            <h3>Available Space</h3>
+            <p class="metric-value" id="availableSpace">Loading...</p>
+        </div>
     </div>
-
-    <div class="strip"></div>
-
-  <nav class="navbar">
-    <div class="hamburger-menu" id="hamburger-menu">
-      <span></span>
-      <span></span>
-      <span></span>
-    </div>
-    <div class="nav-profile" id="nav-profile">
-      <ul class="nav-links">
-        <li><a href="home.html" class="active">Home</a></li>
-        <li><a href="files.html">Drives</a></li>
-        <!--<li><a href="share.html">Share Drive</a></li>-->
-        <li><a href="usage.html">Usage</a></li>
-        <li><a href="account.html">Account</a></li>
-        <li><a href="#" class="logout-btn" id="logout">Logout</a></li>
-      </ul>
-      <img src="" alt="Profile" id="picture" class="profile-img">
-    </div>
-  </nav>
-
-    <main class="container">
-        <section class="section">
-            <h1>Storage Usage Overview</h1>
-            
-            <div class="usage-summary">
-                <div class="usage-metric">
-                    <h3>Total Space</h3>
-                    <p class="metric-value" id="totalSpace">Loading...</p>
-                </div>
-                <div class="usage-metric">
-                    <h3>Used Space</h3>
-                    <p class="metric-value" id="usedSpace">Loading...</p>
-                </div>
-                <div class="usage-metric">
-                    <h3>Available Space</h3>
-                    <p class="metric-value" id="availableSpace">Loading...</p>
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <footer class="footer">
-        <p>© 2024 JNPJ</p>
-    </footer>
-
-  <!-- Add External JavaScript Here -->
-  <script src="base.js"></script>
-</body>
-</html>
+</section>
