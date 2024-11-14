@@ -29,44 +29,59 @@ body {
 
 /* Navigation Styles */
 .navbar {
-    background-color: var(--primary-color);
-    padding: 1rem 2rem;
+    position: relative;
+}
+
+.hamburger-menu {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    flex-direction: column;
+    justify-content: space-around;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+    position: absolute;
+    left: 10px;
+    top: 10px;
 }
 
-.nav-brand {
-    font-size: 1.5rem;
-    font-weight: bold;
-    color: var(--text-color);
-    text-decoration: none;
-}
+.hamburger-menu span {
+    width: 100%;
+    height: 4px;
+    background-color: #333;
+  }
 
-.nav-links {
+  .nav-profile {
+    position: fixed;
+    left: -250px;
+    top: 0;
+    width: 250px;
+    height: 100%;
+    background-color: #fff;
+    transition: left 0.3s ease;
+  }
+  
+  .nav-profile.open {
+    left: 0;
+  }
+  
+  .nav-links {
     list-style: none;
-    display: flex;
-    gap: 1.5rem;
-    align-items: center;
-}
+    padding: 0;
+    margin: 0;
+  }
+  
+  .nav-links li {
+    margin: 15px 0;
+  }
+  
+  .profile-img {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-top: 20px;
+  }
 
-.nav-links a {
-    color: var(--text-color);
-    text-decoration: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    transition: background-color 0.3s ease;
-}
-
-.nav-links a:hover {
-    background-color: var(--accent-color);
-}
-
-.nav-links a.active {
-    background-color: var(--secondary-color);
-}
-
+  
 /* Layout Components */
 .container {
     max-width: 1200px;
@@ -467,4 +482,24 @@ a:hover {
 .small-btn {
     padding: 0.25rem 0.5rem;
     font-size: 0.875rem;
+}
+
+.drag {
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-app-region: drag;
+}
+
+.no-drag {
+    --webkit-app-region: no-drag;
+}
+
+
+.custom-title-bar {
+    display: inline-block;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    margin-left: 20px;
+    height: 40px;
 }

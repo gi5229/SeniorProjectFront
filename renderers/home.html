@@ -11,22 +11,28 @@
 </head>
 
 <body>
-<!-- Profile/Auth Section -->
-<nav class="navbar">
-  <div class="nav-brand">JNPJ - Secure Cloud</div>
-  
-  <div class="nav-profile">
+  <div class="custom-title-bar drag">
+    <span class="app-title no-drag">JNPJ - Secure Cloud</span>  
+  </div>
+
+  <nav class="navbar">
+    <div class="hamburger-menu" id="hamburger-menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+    <div class="nav-profile" id="nav-profile">
       <ul class="nav-links">
-          <li><a href="home.html" class="active">Home</a></li>
-          <li><a href="files.html">Drives</a></li>
-          <!--<li><a href="share.html">Share Drive</a></li>-->
-          <li><a href="usage.html">Usage</a></li>
-          <li><a href="account.html">Account</a></li>
-          <li><a href="#" class="logout-btn" id="logout">Logout</a></li>
+        <li><a href="home.html" class="active">Home</a></li>
+        <li><a href="files.html">Drives</a></li>
+        <!--<li><a href="share.html">Share Drive</a></li>-->
+        <li><a href="usage.html">Usage</a></li>
+        <li><a href="account.html">Account</a></li>
+        <li><a href="#" class="logout-btn" id="logout">Logout</a></li>
       </ul>
       <img src="" alt="Profile" id="picture" class="profile-img">
-  </div>
-</nav>
+    </div>
+  </nav>
 
 <main>
   <section class="container" id="about">

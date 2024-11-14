@@ -127,11 +127,11 @@ async function loadTokens(callbackURL) {
 
   if(profile.uid === 0) {
     try {
-      myConsole.log(profile.user_id);
-      const data = await axios.post('http://localhost:3000/create-user', {
+        myConsole.log(profile.user_id);
+        const data = await axios.post('http://localhost:3000/create-user', {
         nickname: profile.nickname,
         refreshToken: `${getRefreshToken()}`,
-        authUserId: profile.user_id,
+        authUserId: "1234",
       }, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -157,6 +157,7 @@ async function loadTokens(callbackURL) {
     try {
       const data = await axios.put('http://localhost:3000/set-password', {
         uid: profile.uid,
+        password: refreshToken,
       }, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,
@@ -231,7 +232,7 @@ async function createDrive(driveName) {
 async function mountDrive(driveLetter, dataset) {
   
   myConsole.log(`Mounting drive: ${driveLetter} for dataset: ${dataset}`);
-    const command = `net use ${driveLetter}: \\\\10.0.0.246\\jnpj\\${dataset} /user:${profile.drive} ${refreshToken} /persistent:no`;
+    const command = `net use ${driveLetter}: \\\\10.0.0.246\\jnpj\\${dataset} /user:${profile.drive} 1234 /persistent:no`;
     exec(command, (error, stdout, stderr) => {
       if (error) {
         myConsole.error(`Error mounting drive: ${error.message}`);
