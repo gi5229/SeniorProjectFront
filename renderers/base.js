@@ -82,8 +82,39 @@ async function loadPage(page) {
   content.innerHTML = newContent;
   if (page === 'files.html') {
     await initializeDatasets();
+    document.getElementById('create-drive').onclick = async () => {
+      try {
+        console.log('Creating a new drive: ' + document.getElementById('drive-name').value);
+        const response = await window.electronAPI.createDrive(document.getElementById('drive-name').value);
+        addDriveToList(document.getElementById('drive-name').value);
+      } catch (error) {
+        console.error('Error connecting to the API: ' + error);
+      }
+    };
   }
   content.classList.remove('fade-out');
+}
+
+function addDriveToList(driveName) {
+  const container = document.getElementById('dataset-container');
+  const index = container.children.length;
+  const div = document.createElement('div');
+  div.innerHTML = `
+    <select id="drive-letter-${index}">
+      ${Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i))
+        .map(letter => `<option value="${letter}">${letter}</option>`)
+        .join('')}
+    </select>
+    <span>//${driveName}/</span>
+    <button id="connect-${index}" class="connect-btn">Connect</button>
+  `;
+  container.appendChild(div);
+
+  document.getElementById(`connect-${index}`).onclick = () => {
+    const selectedDriveLetter = document.getElementById(`drive-letter-${index}`).value;
+    console.log(`Connecting to dataset: ${driveName} with drive letter: ${selectedDriveLetter}`);
+    window.electronAPI.mountDrive(selectedDriveLetter, driveName);
+  };
 }
 
 // Load the initial page
