@@ -176,19 +176,7 @@ p {
     font-weight: 500;
 }
 
-.logout-btn {
-    background-color: var(--error-color);
-    color: var(--text-color);
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 4px;
-    cursor: pointer;
-    transition: opacity 0.3s ease;
-}
 
-.logout-btn:hover {
-    opacity: 0.9;
-}
 
 /* Login Components */
 .login-prompt {
@@ -251,10 +239,41 @@ p {
 .primary-btn {
     background-color: var(--primary-color);
     color: var(--text-color);
+    margin-top: 1em;
 }
 
 .primary-btn:hover {
     background-color: var(--accent-color);
+}
+
+.menu-btn {
+    background-color: var(--primary-color);
+    color: var(--text-color);
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.menu-btn:hover {
+    opacity: 0.9;
+    color:#1a1a1a
+}
+
+.logout-btn {
+    background-color: var(--error-color);
+    color: var(--text-color);
+    border: none;
+    padding: 0.3rem 1rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+}
+
+.logout-btn:hover {
+    opacity: 0.9;
+    color:#1a1a1a
 }
 
 /* Footer */

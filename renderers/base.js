@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('drives-button').addEventListener('click', () => loadPage('files.html'));
   document.getElementById('usage-button').addEventListener('click', () => loadPage('usage.html'));
   document.getElementById('account-button').addEventListener('click', () => loadPage('account.html'));
+  document.getElementById('settings-button').addEventListener('click', () => loadPage('settings.html'));
 });
 
 async function loadPage(page) {
