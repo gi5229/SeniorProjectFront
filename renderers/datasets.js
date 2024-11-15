@@ -1,4 +1,4 @@
-addEventListener('load', async () => {
+async function initializeDatasets() {
     // reload the tokens
     await window.electronAPI.refreshTokens();
 
@@ -28,7 +28,7 @@ addEventListener('load', async () => {
             window.electronAPI.mountDrive(selectedDriveLetter, profile.drive + '\\' + dataset);
         };
     });
-});
+}
 
 // Listen for a click on the create drive button and take in the user input
 document.getElementById('create-drive').onclick = async () => {
