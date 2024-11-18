@@ -7,7 +7,7 @@ const electronAPI = {
   createDrive: (driveName) => ipcRenderer.invoke('auth:create-drive', driveName),
   refreshTokens: () => ipcRenderer.invoke('auth:refresh-tokens'),
   mountDrive: (driveLetter, dataset) => ipcRenderer.invoke('auth:mount-drive', driveLetter, dataset),
-  
+  getDriveInfo: (drive) => ipcRenderer.invoke('drive:get-info', drive)
 };
 
 process.once("loaded", () => {
