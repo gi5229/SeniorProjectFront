@@ -48,6 +48,16 @@ app.on('ready', () => {
     authService.mountDrive(driveLetter, dataset);
     
   });
+  
+  ipcMain.handle('drive:get-info', async (event, drive) => {
+    try {
+        const result = await apiService.getDriveInfo(drive);
+        return result;
+    } catch (error) {
+        console.error('Error getting drive info:', error);
+        throw error;
+    }
+});
 
   showWindow();
 });
