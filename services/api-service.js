@@ -2,16 +2,33 @@ const axios = require('axios');
 const authService = require('./auth-service');
 
 async function getPrivateData() {
-  const result = await axios.get('http://localhost:3000/private', {
-    headers: {
-      'Authorization': `Bearer ${authService.getAccessToken()}`,
-    },
-  });
-  // Example of how to log the status code of the response
-  console.log(`Status Code: ${result.status}`);
-  return result.data;
+    const result = await axios.get('http://localhost:3000/private', {
+        headers: {
+            'Authorization': `Bearer ${authService.getAccessToken()}`,
+        },
+    });
+    console.log(`Status Code: ${result.status}`);
+    return result.data;
 }
 
-module.exports = {
-  getPrivateData,
+//drive info for usage (backend repo - index.js - line 381)
+async function getDriveInfo(drive) {
+    try {
+        const result = await axios.get(`http://localhost:3000/get-drive-info`, {
+            params: { drive },
+            headers: {
+                'Authorization': `Bearer ${authService.getAccessToken()}`
+            }
+        });
+        return result.data;
+    } catch (error) {
+        console.error('Error getting drive info:', error);
+        throw error;
+    }
 }
+
+// added the drive info export.
+module.exports = {
+    getPrivateData,
+    getDriveInfo
+};
