@@ -15,7 +15,8 @@ async function getPrivateData() {
 async function getDriveInfo(drive) {
     try {
         const result = await axios.get(`http://localhost:3000/get-drive-info`, {
-            params: { drive },
+            drive: drive,
+        }, { 
             headers: {
                 'Authorization': `Bearer ${authService.getAccessToken()}`
             }
