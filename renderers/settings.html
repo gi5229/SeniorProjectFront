@@ -1,43 +1,12 @@
-<section class="section">
-    <h1>App Settings</h1>
-
-    <!--Need to add js--> 
-    <div class="section" id="preferences">
-        <h2>Preferences</h2>
-        <label for="theme">Theme</label>
-        <select id="theme" name="theme">
-            <option value="dark">Dark</option>
-            <option value="light">Light</option>
-        </select>
-
-        <!-- Not sure if possible Just an idea
-        <label for="language">Language</label>
-        <select id="language" name="language">
-            <option value="en">English</option>
-            <option value="es">Spanish</option>
-            <option value="fr">French</option>      
-        </select>-->
-    </div>
-
-    <!-- Notifications Section -->
-    <div class="section" id="notifications">
-        <h2>Notifications</h2>
-        <label>
-            <input type="checkbox" name="email_notifications" checked>
-            Email Notifications
-        </label>
-
-        <label>
-            <input type="checkbox" name="sms_notifications">
-            SMS Notifications
-        </label>
-
-        <label>
-            <input type="checkbox" name="push_notifications" checked>
-            Push Notifications
-        </label>
-    </div>
-    <div class="section">
-        <button type="submit" class="btn primary-btn">Save Preferences</button>
-    </div>
-</section>
+    <section class="section">
+        <h1>App Settings</h1>
+        <div class="section" id="preferences">
+            <h2>Preferences</h2>
+            <label for="theme">Theme</label>
+            <button id="theme-switch">
+                <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--accent-color)">
+                    <path d="M480-120q-133 0-226.5-92T160-435q0-66 25-122.5T254-658l226-222 226 222q44 44 69 100.5T800-435q0 131-93.5 223T480-120Zm0-80v-568L310-600q-35 33-52.5 75T240-435q0 97 70 166t170 69Z"/>
+                </svg>
+            </button>
+        </div>
+    </section>

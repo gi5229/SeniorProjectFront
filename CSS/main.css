@@ -8,9 +8,9 @@
     --dark-background-color: #1a1a1a;
     --surface-color: #333333;     
     --error-color: #ff3333;       
-    --success-color: #4caf50;    
+    --success-color: #4caf50;
+    --base-variant: #2b80ff; 
 }
-
 
 * {
     margin: 0;
@@ -480,4 +480,45 @@ a:hover {
 }
 #content.fade-out {
     opacity: 0;
+}
+
+/* Theme Switch */
+
+.theme-blue {
+    --primary-color: #2b80ff;    
+    --secondary-color: #4a4a4a; 
+    --accent-color: #2b80ff;      
+    --text-color: #ffffff;
+    --background-color: #2a2a2a; 
+    --dark-background-color: #1a1a1a;
+    --surface-color: #333333;     
+    --error-color: #ff3333;       
+    --success-color: #4caf50;
+    --base-variant: #ff6b2b;
+}
+
+#theme-switch{
+    height: 50px;
+    width: 50px;
+    padding: 0;
+    border-radius: 50%;
+    background-color: var(--base-variant);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+}
+#theme-switch svg{
+    fill: var(--primary-color);
+}
+#theme-switch svg:last-child{
+    display: none;
+}
+.theme-blue #theme-switch svg:first-child{
+    display: none;
+}
+.theme-blue #theme-switch svg:last-child{
+    display: block;
 }
