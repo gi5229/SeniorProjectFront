@@ -131,7 +131,7 @@ async function loadTokens(callbackURL) {
         const data = await axios.post('http://localhost:3000/create-user', {
         nickname: profile.nickname,
         refreshToken: `${getRefreshToken()}`,
-        authUserId: "1234",
+        authUserId: profile.user_id,
       }, {
         headers: {
           'Authorization': `Bearer ${accessToken}`,

@@ -1,7 +1,7 @@
 async function initializeUsageDashboard() {
   try {
-      await window.electronAPI.refreshTokens();
-      const data = await window.electronAPI.getTrueNASStatus();
+      await window.electronAPI.refreshTokens(); 
+      const data = await window.electronAPI.getTrueNASStatus();  
       if (data) {
           updateDashboard(data);
           updateLastUpdated();
