@@ -1,4 +1,10 @@
 var firstClick = true;
+let darkmode = localStorage.getItem('darkmode')
+
+if (darkmode === 'active') {
+  
+  enableDarkmode()
+}
 
 addEventListener('load',async  () =>{
   const profile = await window.electronAPI.getProfile();
@@ -91,7 +97,20 @@ async function loadPage(page) {
         console.error('Error connecting to the API: ' + error);
       }
     };
+  } else if (page === 'settings.html') {
+    
+    document.getElementById('theme-switch1').onclick = async () => {
+      console.log('theme-switch clicked');
+      darkmode = localStorage.getItem('darkmode')
+      if (darkmode !== 'active') {
+        enableDarkmode()
+      } else {
+        disableDarkmode()
+      }
+      
+    };
   }
+
   content.classList.remove('fade-out');
 }
 
@@ -115,6 +134,15 @@ function addDriveToList(driveName) {
     console.log(`Connecting to dataset: ${driveName} with drive letter: ${selectedDriveLetter}`);
     window.electronAPI.mountDrive(selectedDriveLetter, driveName);
   };
+}
+function enableDarkmode()  {
+  document.body.classList.add('darkmode')
+  localStorage.setItem('darkmode', 'active')
+}
+
+function disableDarkmode () {
+  document.body.classList.remove('darkmode')
+  localStorage.setItem('darkmode', null)
 }
 
 // Load the initial page

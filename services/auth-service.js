@@ -248,6 +248,98 @@ async function mountDrive(driveLetter, dataset) {
 
 }
 
+async function unmountDrive(driveLetter) {
+  myConsole.log(`Unmounting drive: ${driveLetter}`);
+  const command = `net use ${driveLetter}: /delete /y`;
+  exec(command, (error, stdout, stderr) => {
+    if (error) {
+      myConsole.error(`Error unmounting drive: ${error.message}`);
+        return;
+    }
+    if (stderr) {
+      myConsole.error(`Error: ${stderr}`);
+        return;
+    }
+    myConsole.log(`Drive unmounted successfully: ${stdout}`);
+  });
+}
+
+// TODO: Complete the change email function
+async function changeEmail(email) {
+  try {
+    const data = await axios.post('http://localhost:3000/change-email', {
+      email: email,
+      uid: profile.user_id,
+    }, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    });
+
+    if (data.status != 200) {
+      myConsole.log(data);
+      await createLogoutWindow();
+      //throw new Error('Failed to create user in cloud storage. Please close and reopen the app, and try signing in. If this persists, please contact support at
+    }
+  }
+  catch (error) {
+    myConsole.log(error);
+    myConsole.log(error.status);
+    await createLogoutWindow();
+    //throw error;
+  }
+}
+
+// TODO: Complete the change password function
+async function changePassword(password) {
+  try {
+    const data = await axios.post('http://localhost:3000/change-password', {
+      password: password,
+      uid: profile.user_id,
+    }, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    });
+
+    if (data.status != 200) {
+      myConsole.log(data);
+      await createLogoutWindow();
+      //throw new Error('Failed to create user in cloud storage. Please close and reopen the app, and try signing in. If this persists, please contact support at
+    }
+  }
+  catch (error) {
+    myConsole.log(error);
+    myConsole.log(error.status);
+    await createLogoutWindow();
+    //throw error;
+  }
+}
+
+// TODO: Complete MFA setup function
+async function mfaSetup() {
+  try {
+    const data = await axios.post('http://localhost:3000/mfa-setup', {
+      uid: profile.user_id,
+    }, {
+      headers: {
+        'Authorization': `Bearer ${accessToken}`,
+      },
+    });
+
+    if (data.status != 200) {
+      myConsole.log(data);
+      await createLogoutWindow();
+      //throw new Error('Failed to create user in cloud storage. Please close and reopen the app, and try signing in. If this persists, please contact support at
+    }
+  }
+  catch (error) {
+    myConsole.log(error);
+    myConsole.log(error.status);
+    await createLogoutWindow();
+    //throw error;
+  }
+}
 
 
 async function logout() {
@@ -294,4 +386,5 @@ module.exports = {
   getDrive,
   createDrive,
   mountDrive,
+  unmountDrive,
 };

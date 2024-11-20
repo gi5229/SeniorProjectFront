@@ -12,10 +12,13 @@
     --base-variant: #2b80ff; 
 }
 
+
+
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    color: var(--text-color);
 }
 
 body {
@@ -484,17 +487,21 @@ a:hover {
 
 /* Theme Switch */
 
-.theme-blue {
+.darkmode {
     --primary-color: #2b80ff;    
     --secondary-color: #4a4a4a; 
     --accent-color: #2b80ff;      
-    --text-color: #ffffff;
+    --text-color: #2b80ff;
     --background-color: #2a2a2a; 
     --dark-background-color: #1a1a1a;
     --surface-color: #333333;     
     --error-color: #ff3333;       
     --success-color: #4caf50;
     --base-variant: #ff6b2b;
+}
+
+.darkmode h1 {
+    color: var(--base-variant);
 }
 
 #theme-switch{
@@ -507,8 +514,7 @@ a:hover {
     justify-content: center;
     align-items: center;
     position: fixed;
-    top: 20px;
-    right: 20px;
+
 }
 #theme-switch svg{
     fill: var(--primary-color);
