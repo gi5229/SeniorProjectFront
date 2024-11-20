@@ -500,7 +500,8 @@ a:hover {
     --base-variant: #ff6b2b;
 }
 
-.darkmode h1 {
+/* Dark Mode example of specifying non blue text */
+.darkmode h1 { 
     color: var(--base-variant);
 }
 

@@ -7,13 +7,13 @@ if (darkmode === 'active') {
 }
 
 addEventListener('load',async  () =>{
-  const profile = await window.electronAPI.getProfile();
-  document.getElementById('picture').src = profile.picture;
+  //const profile = await window.electronAPI.getProfile();
+  //document.getElementById('picture').src = profile.picture;
   // document.getElementById('success').innerText = 'You successfully used OpenID Connect and OAuth 2.0 to authenticate.';
 });
 
 document.getElementById('logout').onclick = () => {
-  window.electronAPI.logOut();
+  window.electronAPI.createLogoutWindow();
 };
 
 document.getElementById('hamburger-menu').addEventListener('click', function() {
@@ -109,6 +109,19 @@ async function loadPage(page) {
       }
       
     };
+  } else if (page === 'account.html') {
+    document.getElementById('change-email').onclick = async () => {
+      const newEmail = document.getElementById('new-email').value;
+      await window.electronAPI.changeEmail(newEmail);
+    };
+
+    /*
+    document.getElementById('change-password').onclick = async () => {
+      const newPassword = document.getElementById('new-password').value;
+      console.log('Changing password to: ' + newPassword);
+      await window.electronAPI.changePassword(newPassword);
+    };
+    */
   }
 
   content.classList.remove('fade-out');
