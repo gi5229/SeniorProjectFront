@@ -384,6 +384,37 @@ async function mfaSetup() {
   }
 }
 
+async function getPoolInformation() {
+  const result = await axios.get('http://localhost:3000/api/v2.0/pool', {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+    },
+  });
+  console.log(`Pool Information: ${result.data}`);
+  return result.data;
+}
+
+async function getDiskUsage() {
+  const result = await axios.get('http://localhost:3000/api/v2.0/disk', {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+    },
+  });
+  console.log(`Disk Usage: ${result.data}`);
+  return result.data;
+}
+
+async function getAvailableDiskSpace() {
+  const result = await axios.get('http://localhost:3000/api/v2.0/pool', {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+    },
+  });
+  const availableSpace = result.data.reduce((acc, pool) => acc + pool.available, 0);
+  console.log(`Available Disk Space: ${availableSpace}`);
+  return availableSpace;
+}
+
 
 async function logout() {
   await keytar.deletePassword(keytarService, keytarAccount);
@@ -434,4 +465,7 @@ module.exports = {
   changeEmail,
   createLogoutWindow,
   getMountedDrive,
+  getPoolInformation,
+  getDiskUsage,
+  getAvailableDiskSpace,
 };
