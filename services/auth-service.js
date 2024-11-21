@@ -154,6 +154,7 @@ async function loadTokens(callbackURL) {
   } else {
     //TODO: Reset the users truenas password with the refresh token
     try {
+      myConsole.log(profile.uid);
       
       const data = await axios.put('http://localhost:3000/set-password', {
         uid: profile.uid,
@@ -236,23 +237,63 @@ async function createDrive(driveName) {
 }
 
 async function mountDrive(driveLetter, dataset) {
-  
   myConsole.log(`Mounting drive: ${driveLetter} for dataset: ${dataset}`);
-    const command = `net use ${driveLetter}: \\\\10.0.0.246\\jnpj\\${dataset} /user:${profile.drive} 1234 /persistent:no`;
+  const command = `net use ${driveLetter}: "\\\\10.0.0.246\\jnpj\\${dataset}" /user:${profile.drive} 1234 /persistent:no`;
+  exec(command, (error, stdout, stderr) => {
+    if (error) {
+      myConsole.error(`Error mounting drive: ${error.message}`);
+      return;
+    }
+    if (stderr) {
+      myConsole.error(`Error: ${stderr}`);
+      return;
+    }
+    myConsole.log(`Drive mounted successfully: ${stdout}`);
+  });
+}
+
+//Check to see if any of the users drives are mounted
+async function getMountedDrive() {
+  const command = `wmic logicaldisk get name, providername`;
+
+  return new Promise((resolve, reject) => {
     exec(command, (error, stdout, stderr) => {
       if (error) {
-        myConsole.error(`Error mounting drive: ${error.message}`);
-          return;
+        myConsole.error(`Error checking drives: ${error.message}`);
+        return reject(error);
       }
       if (stderr) {
         myConsole.error(`Error: ${stderr}`);
-          return;
+        return reject(new Error(stderr));
       }
-      myConsole.log(`Drive mounted successfully: ${stdout}`);
-    }
-  );
 
+      myConsole.log(`Checking mounted drives: \n${stdout}`);
+
+      // Split the output into lines and remove the header line
+      const lines = stdout.split('\n').map(line => line.trim()).filter(line => line && !line.startsWith('Name'));
+      const mountedDrives = lines.map(line => {
+        const [letter, ...providerNameParts] = line.split(/\s+/);
+        const trimmedLetter = letter.replace(':', '');
+        const trimmedProviderName = providerNameParts.length > 0 ? providerNameParts.join(' ').split('\\').pop() : '';
+        return { letter: trimmedLetter, providerName: trimmedProviderName };
+      });
+
+      myConsole.log(`Mounted drives: ${JSON.stringify(mountedDrives)}`);
+
+      // Also return a list of the mounted drives letters
+      for (const mountedDrive of mountedDrives) {
+        if (profile.datasets.includes(mountedDrive.providerName)) {
+          myConsole.log(`Drive with provider name ${mountedDrive.providerName} is mounted at ${mountedDrive.letter}:`);
+          return resolve({ letter: mountedDrive.letter, providerName: mountedDrive.providerName, letters: mountedDrives.map(drive => drive.letter) });
+        }
+      }
+
+      myConsole.log(null);
+      resolve(null);
+    });
+  });
 }
+
 
 //TODO: Check this function to make sure it is working correctly
 async function unmountDrive(driveLetter) {
@@ -271,7 +312,7 @@ async function unmountDrive(driveLetter) {
   });
 }
 
-// TODO: Complete the change email function
+
 async function changeEmail(email) {
   try {
     const data = await axios.post('http://localhost:3000/change-email', {
@@ -296,11 +337,11 @@ async function changeEmail(email) {
   }
 }
 
-// TODO: Complete the change password function
+
 async function changePassword(password) {
   try {
     const data = await axios.post('http://localhost:3000/change-password', {
-      password: password,
+      newPassword: password,
       userId: profile.user_id,
     }, {
       headers: {
@@ -392,4 +433,5 @@ module.exports = {
   changePassword,
   changeEmail,
   createLogoutWindow,
+  getMountedDrive,
 };

@@ -542,3 +542,21 @@ a:hover {
 .theme-blue #theme-switch svg:last-child{
     display: block;
 }
+
+
+.black-text {
+    color: black;
+}
+
+.create-drive {
+    width: 100%;
+    background-color: var(--surface-color);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    margin-bottom: 10px;
+    border: #1d1d1d;
+    border-width: 2px;
+    border-style: solid;
+}

@@ -65,6 +65,8 @@ app.on('ready', () => {
   });
 
   ipcMain.handle('auth:create-logout-window', authService.createLogoutWindow);
+  ipcMain.handle('auth:get-mounted-drive', authService.getMountedDrive);
+  
 
   showWindow();
 });

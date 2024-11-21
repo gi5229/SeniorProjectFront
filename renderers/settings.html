@@ -1,8 +1,29 @@
     <section class="section">
+        <h1>Account Settings</h1>
+
+        <div class="account-info">
+            <div class="profile-section">
+                <h2>Profile Information</h2>
+                <form id="profileForm">
+                    <div class="form-group">
+                        <label for="email">Email</label>
+                        <input type="email" id="new-email" name="email">
+                    </div>
+                    <button type="submit" class="btn primary-btn" id="change-email">Update Email</button>
+                    <div class="form-group">
+                        <label for="password">Password</label>
+                        <input type="text" id="new-password" name="password">
+                        <!--<button class="btn secondary-btn" id="enable2FA">Enable Two-Factor Authentication</button>-->
+                    </div>
+                    <button type="submit" class="btn secondary-btn" id="change-password">Change Password</button>
+                </form>
+            </div>
+        </div>
+
         <h1>App Settings</h1>
         <div class="section" id="preferences">
             <h2>Preferences</h2>
-            <label for="theme">Theme</label>
+            <label for="theme">Color Blind Mode</label>
             <button id="theme-switch1">
                 <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="var(--base-variant)">
                     <path d="M480-120q-133 0-226.5-92T160-435q0-66 25-122.5T254-658l226-222 226 222q44 44 69 100.5T800-435q0 131-93.5 223T480-120Zm0-80v-568L310-600q-35 33-52.5 75T240-435q0 97 70 166t170 69Z"/>
