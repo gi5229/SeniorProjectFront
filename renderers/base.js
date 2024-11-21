@@ -136,11 +136,13 @@ function addDriveToList(driveName) {
   };
 }
 function enableDarkmode()  {
+  document.body.classList.remove('defaultColor')
   document.body.classList.add('darkmode')
   localStorage.setItem('darkmode', 'active')
 }
 
 function disableDarkmode () {
+  document.body.classList.add('defaultColor')
   document.body.classList.remove('darkmode')
   localStorage.setItem('darkmode', null)
 }

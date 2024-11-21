@@ -122,7 +122,7 @@ main {
 
 /* Typography */
 h1 {
-    color: var(--primary-color);
+    color: var(--text-color);
     margin-bottom: 1.5rem;
     font-size: 2.5rem;
     font-weight: bold;
@@ -260,6 +260,7 @@ p {
 }
 
 .menu-btn:hover {
+    background-color: var(--accent-color);
     opacity: 0.9;
     color:#1a1a1a
 }
@@ -268,7 +269,7 @@ p {
     background-color: var(--error-color);
     color: var(--text-color);
     border: none;
-    padding: 0.3rem 1rem;
+    padding: 0.5rem 1rem;
     border-radius: 4px;
     cursor: pointer;
     transition: opacity 0.3s ease;
@@ -373,7 +374,7 @@ a:hover {
 .metric-value {
     font-size: 2rem;
     font-weight: bold;
-    color: var(--primary-color);
+    color: var(--text-color);
 }
 
 .usage-graph {
@@ -487,20 +488,33 @@ a:hover {
 
 /* Theme Switch */
 
-.darkmode {
-    --primary-color: #2b80ff;    
+.defaultcolor {
+    --primary-color: #ff6b2b;    
     --secondary-color: #4a4a4a; 
-    --accent-color: #2b80ff;      
-    --text-color: #2b80ff;
+    --accent-color: #ff8c55;      
+    --text-color: #ffffff;
     --background-color: #2a2a2a; 
     --dark-background-color: #1a1a1a;
     --surface-color: #333333;     
     --error-color: #ff3333;       
     --success-color: #4caf50;
+    --base-variant: #2b80ff;
+}
+
+.darkmode {
+    --primary-color: #ffffff;    
+    --secondary-color: #4a4a4a; 
+    --accent-color: #ffffffa8;      
+    --text-color: #2b80ff;
+    --background-color: #2a2a2a; 
+    --dark-background-color: #1a1a1a;
+    --surface-color: #333333;     
+    --error-color: #ffffff;       
+    --success-color: #4caf50;
     --base-variant: #ff6b2b;
 }
 
-.darkmode h1 {
+.darkmode h1,.darkmode h2, .darkmode h3 {
     color: var(--base-variant);
 }
 
@@ -517,7 +531,7 @@ a:hover {
 
 }
 #theme-switch svg{
-    fill: var(--primary-color);
+    fill: var(--base-variant);
 }
 #theme-switch svg:last-child{
     display: none;
