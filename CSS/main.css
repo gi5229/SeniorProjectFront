@@ -438,8 +438,12 @@ a:hover {
 
 /* Button Variants */
 .secondary-btn {
-    background-color: var(--secondary-color);
+    background-color: var(--primary-color);
     color: var(--text-color);
+}
+
+.secondary-btn:hover {
+    background-color: var(--accent-color);
 }
 
 .danger-btn {
@@ -514,22 +518,36 @@ a:hover {
     --base-variant: #ff6b2b;
 }
 
-.darkmode h1,.darkmode h2, .darkmode h3 {
+.darkmode h1,.darkmode h2, .darkmode h3, .darkmode strong, .darkmode li::marker {
     color: var(--base-variant);
+}
+
+.darkmode button {
+    background-color: #2b80ff;
+    color: var(--primary-color);
+}
+
+.color-blind-button {
+    background-color: #ffffff !important; /* Forces a white background */
+    border-radius: 4px; /* Keeps the rounded corners */
+    cursor: pointer; /* Indicates interactivity */
+}
+
+.color-blind-button:hover {
+    opacity: 0.6;
 }
 
 #theme-switch{
     height: 50px;
     width: 50px;
     padding: 0;
-    border-radius: 50%;
-    background-color: var(--base-variant);
+    border-radius: 4px;
     display: flex;
     justify-content: center;
     align-items: center;
     position: fixed;
-
 }
+
 #theme-switch svg{
     fill: var(--base-variant);
 }
@@ -543,7 +561,7 @@ a:hover {
     display: block;
 }
 
-
+/* other styles */
 .black-text {
     color: black;
 }
