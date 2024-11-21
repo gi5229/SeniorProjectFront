@@ -41,10 +41,6 @@ async function initializeDatasets() {
     // Check if any of the users datasets are already mounted
     const mountedDrive = await window.electronAPI.getMountedDrive();
 
-    
-  
-    
-  
   
     datasets.forEach((dataset, index) => {
       if (mountedDrive && mountedDrive.providerName === dataset) {
@@ -114,6 +110,46 @@ async function initializeDatasets() {
       }
   });
 }
+
+
+const { ipcRenderer } = require('electron');
+
+async function fetchPoolInformation() {
+  try {
+    const poolInfo = await ipcRenderer.invoke('get-pool-information');
+    console.log('Pool Information:', poolInfo);
+    document.getElementById('pool-info').innerText = JSON.stringify(poolInfo, null, 2);
+  } catch (error) {
+    console.error('Error fetching pool information:', error);
+  }
+}
+
+
+async function fetchDiskUsage() {
+  try {
+    const diskUsage = await ipcRenderer.invoke('get-disk-usage');
+    console.log('Disk Usage:', diskUsage);
+    document.getElementById('disk-usage').innerText = JSON.stringify(diskUsage, null, 2);
+  } catch (error) {
+    console.error('Error fetching disk usage:', error);
+  }
+}
+
+async function fetchAvailableDiskSpace() {
+  try {
+    const availableDiskSpace = await ipcRenderer.invoke('get-available-disk-space');
+    console.log('Available Disk Space:', availableDiskSpace);
+    document.getElementById('available-disk-space').innerText = JSON.stringify(availableDiskSpace, null, 2);
+  } catch (error) {
+    console.error('Error fetching available disk space:', error);
+  }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  fetchPoolInformation();
+  fetchDiskUsage();
+  fetchAvailableDiskSpace();
+});
 
 
 
