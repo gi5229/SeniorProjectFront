@@ -12,13 +12,12 @@ const {apiIdentifier, auth0Domain, clientId} = envVariables;
 
 const redirectUri = 'http://localhost/callback';
 
-const keytarService = 'electron-openid-oauth';
+const keytarService = 'electron-openid-oauth-v2';
 const keytarAccount = os.userInfo().username;
 
 // TODO: Remove special console log later
 var nodeConsole = require('console');
 var myConsole = new nodeConsole.Console(process.stdout, process.stderr);
-
 
 
 
@@ -155,6 +154,7 @@ async function loadTokens(callbackURL) {
   } else {
     //TODO: Reset the users truenas password with the refresh token
     try {
+      
       const data = await axios.put('http://localhost:3000/set-password', {
         uid: profile.uid,
         password: refreshToken,
@@ -179,10 +179,12 @@ async function loadTokens(callbackURL) {
   }
 
   
+  
   if(!profile.limited) {
     try {
+      myConsole.log(uid);
       const data = await axios.post('http://localhost:3000/set-user-size', {
-        uid: profile.uid,
+        uid: uid,
         authUserId: profile.user_id,
       }, {
         headers: {
@@ -198,6 +200,10 @@ async function loadTokens(callbackURL) {
     }
   }
     
+}
+
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
 }
 
 
@@ -248,6 +254,7 @@ async function mountDrive(driveLetter, dataset) {
 
 }
 
+//TODO: Check this function to make sure it is working correctly
 async function unmountDrive(driveLetter) {
   myConsole.log(`Unmounting drive: ${driveLetter}`);
   const command = `net use ${driveLetter}: /delete /y`;
@@ -268,8 +275,8 @@ async function unmountDrive(driveLetter) {
 async function changeEmail(email) {
   try {
     const data = await axios.post('http://localhost:3000/change-email', {
-      email: email,
-      uid: profile.user_id,
+      newEmail: email,
+      userId: profile.user_id,
     }, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -278,8 +285,7 @@ async function changeEmail(email) {
 
     if (data.status != 200) {
       myConsole.log(data);
-      await createLogoutWindow();
-      //throw new Error('Failed to create user in cloud storage. Please close and reopen the app, and try signing in. If this persists, please contact support at
+      // Error
     }
   }
   catch (error) {
@@ -295,7 +301,7 @@ async function changePassword(password) {
   try {
     const data = await axios.post('http://localhost:3000/change-password', {
       password: password,
-      uid: profile.user_id,
+      userId: profile.user_id,
     }, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
@@ -304,15 +310,11 @@ async function changePassword(password) {
 
     if (data.status != 200) {
       myConsole.log(data);
-      await createLogoutWindow();
       //throw new Error('Failed to create user in cloud storage. Please close and reopen the app, and try signing in. If this persists, please contact support at
     }
   }
   catch (error) {
     myConsole.log(error);
-    myConsole.log(error.status);
-    await createLogoutWindow();
-    //throw error;
   }
 }
 
@@ -387,4 +389,7 @@ module.exports = {
   createDrive,
   mountDrive,
   unmountDrive,
+  changePassword,
+  changeEmail,
+  createLogoutWindow,
 };

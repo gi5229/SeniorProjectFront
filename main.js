@@ -49,6 +49,23 @@ app.on('ready', () => {
     
   });
 
+  ipcMain.handle('auth:unmount-drive', async (event, driveLetter) => {
+    console.log(`Received driveLetter: ${driveLetter}`); // Log the drive letter in main.js
+    authService.unmountDrive(driveLetter);
+  });
+
+  ipcMain.handle('auth:change-email', async (event, newEmail) => {
+    console.log(`Received newEmail: ${newEmail}`); // Log the new email in main.js
+    await authService.changeEmail(newEmail);
+  });
+
+  ipcMain.handle('auth:change-password', async (event, newPassword) => {
+    console.log(`Received newPassword: ${newPassword}`); // Log the new password in main.js
+    await authService.changePassword(newPassword);
+  });
+
+  ipcMain.handle('auth:create-logout-window', authService.createLogoutWindow);
+
   showWindow();
 });
 
