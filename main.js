@@ -24,7 +24,22 @@ var myConsole = new nodeConsole.Console(process.stdout, process.stderr);
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.on('ready', () => {
+  
+  
+  ipcMain.handle('get-pool-information', async () => {
+    const poolInfo = await authService.getPoolInformation();
+    return poolInfo;
+  });
 
+  ipcMain.handle('get-disk-usage', async () => {
+    const diskUsage = await authService.getDiskUsage();
+    return diskUsage;
+  });
+
+  ipcMain.handle('get-available-disk-space', async () => {
+    const availableDiskSpace = await authService.getAvailableDiskSpace();
+    return availableDiskSpace;
+  });
 
 
   // Handle IPC messages from the renderer process.
