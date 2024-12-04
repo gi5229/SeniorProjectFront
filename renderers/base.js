@@ -159,16 +159,23 @@ async function loadPage(page) {
       }
     };
   } else if (page === 'settings.html') {
-    
-    document.getElementById('theme-switch1').onclick = async () => {
-      console.log('theme-switch clicked');
-      darkmode = localStorage.getItem('darkmode')
-      if (darkmode !== 'active') {
+    var slider = document.getElementById('color-slider');
+
+    if(localStorage.getItem('darkmode') === 'active') {
+      slider.checked = true;
+    } else {
+      slider.checked = false;
+    }
+  
+    document.getElementById('color-slider').addEventListener("change", function() {
+
+      if (this.checked) {
         enableDarkmode()
       } else {
         disableDarkmode()
       }
-    }
+    });
+    
 
     document.getElementById('change-email').onclick = async () => {
       const newEmail = document.getElementById('new-email').value;
