@@ -230,6 +230,88 @@ loadPage('page1.html');
 
 
 
+(function() {
+  console.log("script is running!");
 
+  function formatDateTime(date) {
+      const options = {
+          year: 'numeric',
+          month: 'numeric',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: 'numeric',
+          hour12: true
+      };
+      return new Intl.DateTimeFormat('en-US', options).format(date);
+  }
 
+  function addSessionHistoryItem(message) {
+      const sessionList = document.getElementById('sessionList');
+      if (!sessionList) {
+          console.error("sessionList element not found");
+          return;
+      }
+      console.log("Adding item:", message); // Debugging
+      const listItem = document.createElement('li');
+      listItem.textContent = message;
+      sessionList.prepend(listItem); // Prepend to show most recent first
+  }
 
+  function loadSessionHistory() {
+      const sessionHistory = JSON.parse(localStorage.getItem('sessionHistory')) || [];
+      console.log("Loaded session history:", sessionHistory); // Debugging
+      sessionHistory.reverse().forEach(item => addSessionHistoryItem(item)); // Reverse to show most recent first
+  }
+
+  function saveSessionHistory(message) {
+      const sessionHistory = JSON.parse(localStorage.getItem('sessionHistory')) || [];
+      sessionHistory.push(message);
+      localStorage.setItem('sessionHistory', JSON.stringify(sessionHistory));
+      console.log("Saved session history:", sessionHistory); // Debugging
+  }
+
+  // Event listener for page load
+  document.addEventListener('DOMContentLoaded', () => {
+      const pageName = window.location.pathname.split("/").pop();
+      console.log("Page Name:", pageName);
+
+      if (pageName.includes('home')) {
+          saveSessionHistory(`Session started at ${formatDateTime(new Date())}`); // Log session start
+
+      } else if (pageName.includes('settings')) {
+          displaySessionHistory(); // Display session history when the settings page loads
+
+          document.getElementById('refreshButton').addEventListener('click', () => {
+              const sessionList = document.getElementById('sessionList');
+              if (!sessionList) {
+                  console.error("sessionList element not found on refresh");
+                  return;
+              }
+              sessionList.innerHTML = ''; // Clear current session list
+              console.log("Refreshing session history"); // Debugging
+              loadSessionHistory(); // Reload session history
+          });
+
+          document.getElementById('clearButton').addEventListener('click', () => {
+              localStorage.removeItem('sessionHistory');
+              const sessionList = document.getElementById('sessionList');
+              if (sessionList) {
+                  sessionList.innerHTML = ''; // Clear displayed session list
+              }
+              console.log("Cleared session history"); // Debugging
+          });
+      }
+  });
+
+  // Event listener for window close
+  window.addEventListener('beforeunload', (event) => {
+      if (window.location.pathname.includes('home') || window.location.pathname.includes('settings')) {
+          saveSessionHistory(`Session ended at ${formatDateTime(new Date())}`);
+          console.log("Session end logged on window close."); // Debugging
+      }
+  });
+
+  window.displaySessionHistory = function() {
+      loadSessionHistory();
+  };
+})();

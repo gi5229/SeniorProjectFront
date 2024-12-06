@@ -404,7 +404,7 @@ a:hover {
 .form-group input[type="text"],
 .form-group input[type="email"],
 .form-group select {
-    width: 100%;
+    width: 25%;
     padding: 0.5rem;
     border-radius: 4px;
     border: 1px solid var(--surface-color);
@@ -671,4 +671,148 @@ a:hover {
     border-radius: 50%;
   }
 
+/* Dark theme styles for session log widget */
+.session-history-widget {
+    background: #333; /* Dark gray background for the widget */
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    width: 300px; /* Square box */
+    height: 300px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Darker shadow for contrast */
+    overflow-y: auto; /* Scroll if content overflows */
+    position: fixed; /* Position widget to the right */
+    right: 20px;
+    top: 70px;
+}
 
+.session-history-widget .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.session-history-widget h3 {
+    margin: 0;
+    color: #e0e0e0; /* Light text color for the title */
+}
+
+.session-history-widget button {
+    background: #444; /* Darker gray for buttons */
+    color: #e0e0e0; /* Light text color for buttons */
+    border: none;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    
+}
+
+.session-history-widget button:hover {
+    background: #555; /* Slightly lighter gray on hover */
+}
+
+.session-history-widget ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.session-history-widget ul li {
+    background: #444; /* Darker gray for list items */
+    color: #e0e0e0; /* Light text color for list items */
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Darker shadow for contrast */
+}
+
+/* Scoped CSS for 3D Hover Effect */
+.dynamic-style .wrapper {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    perspective: 2000px;
+}
+
+.dynamic-style .container {
+    width: 300px;
+    margin: 20px;
+    perspective: 1000px;
+    cursor: pointer;
+    transform-style: preserve-3d;
+    position: relative;
+    z-index: 1; /* Ensure container is on top */
+}
+
+.dynamic-style .image {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    background:  #333333;
+    color: orange;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.6s ease-in-out, box-shadow 0.6s ease-in-out;
+    transform-style: preserve-3d;
+    transform: rotateX(70deg) translateY(100px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+    z-index: 3; /* Ensure image is on top */
+}
+
+.dynamic-style .image .title {
+    font-size: 2em;
+    font-weight: bold;
+    color: #ff6b2b; /* Ensure text is visible */
+    z-index: 3; /* Ensure text is on top */
+}
+
+.dynamic-style .container:hover .image {
+    transform: rotateX(0deg) translateY(0);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+}
+
+.dynamic-style .story {
+    position: absolute;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: #1a1a1a;
+    color: black;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    text-align: center;
+    transform: rotateX(70deg);
+    transition: transform 0.6s ease-in-out;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+    z-index: 2; /* Ensure story is on top */
+}
+
+.dynamic-style .container:hover .story {
+    transform: rotateX(0deg);
+    backface-visibility: hidden;
+    z-index: 3; /* Ensure story is on top during hover */
+}
+
+.dynamic-style .page {
+    width: 100%;
+    text-align: center;
+    margin-top: 40px;
+}
+
+.dynamic-style .page h4 {
+    font-size: 1.2em;
+}
+
+.dynamic-style .page ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+.dynamic-style .page ul li {
+    display: inline;
+    margin: 0 10px;
+    font-size: 1.5em;
+}
