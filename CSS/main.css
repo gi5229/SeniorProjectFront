@@ -671,60 +671,61 @@ a:hover {
     border-radius: 50%;
   }
 
-/* Dark theme styles for session log widget */
-.session-history-widget {
-    background: #333; /* Dark gray background for the widget */
-    padding: 20px;
+/* Adjusted CSS styles for session log box */
+.session-log-box {
+    background: #333;
+    padding: 10px; /* Reduce padding */
     border-radius: 10px;
     margin-bottom: 20px;
-    width: 300px; /* Square box */
-    height: 300px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Darker shadow for contrast */
-    overflow-y: auto; /* Scroll if content overflows */
-    position: fixed; /* Position widget to the right */
-    right: 20px;
-    top: 70px;
+    width: 250px; /* Adjusted width */
+    max-width: 250px; /* Maximum width */
+    height: 300px; /* Set height */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    overflow-y: auto;
+    position: fixed; /* Fixed position to stay in place */
+    right: 20px; /* Position it to the right */
+    top: 20px; /* Position it at the top */
 }
 
-.session-history-widget .header {
+.session-log-box .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-bottom: 10px;
 }
 
-.session-history-widget h3 {
+.session-log-box h3 {
     margin: 0;
-    color: #e0e0e0; /* Light text color for the title */
+    color: #e0e0e0;
 }
 
-.session-history-widget button {
-    background: #444; /* Darker gray for buttons */
-    color: #e0e0e0; /* Light text color for buttons */
+.session-log-box button {
+    background: #444;
+    color: #e0e0e0;
     border: none;
     padding: 5px 10px;
     border-radius: 5px;
     cursor: pointer;
-    
+    transition: background 0.3s;
 }
 
-.session-history-widget button:hover {
-    background: #555; /* Slightly lighter gray on hover */
+.session-log-box button:hover {
+    background: #555;
 }
 
-.session-history-widget ul {
+.session-log-box ul {
     list-style-type: none;
     padding: 0;
     margin: 0;
 }
 
-.session-history-widget ul li {
-    background: #444; /* Darker gray for list items */
-    color: #e0e0e0; /* Light text color for list items */
+.session-log-box ul li {
+    background: #444;
+    color: #ff0000;
     padding: 10px;
     margin-bottom: 5px;
     border-radius: 5px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Darker shadow for contrast */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 /* Scoped CSS for 3D Hover Effect */

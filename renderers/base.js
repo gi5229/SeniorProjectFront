@@ -231,7 +231,7 @@ loadPage('page1.html');
 
 
 (function() {
-  console.log("script is running!");
+  console.log("Shared script is running!");
 
   function formatDateTime(date) {
       const options = {
@@ -251,7 +251,7 @@ loadPage('page1.html');
           console.error("sessionList element not found");
           return;
       }
-      console.log("Adding item:", message); // Debugging
+      console.log("Adding item:", message);
       const listItem = document.createElement('li');
       listItem.textContent = message;
       sessionList.prepend(listItem); // Prepend to show most recent first
@@ -259,38 +259,32 @@ loadPage('page1.html');
 
   function loadSessionHistory() {
       const sessionHistory = JSON.parse(localStorage.getItem('sessionHistory')) || [];
-      console.log("Loaded session history:", sessionHistory); // Debugging
-      sessionHistory.reverse().forEach(item => addSessionHistoryItem(item)); // Reverse to show most recent first
+      console.log("Loaded session history:", sessionHistory);
+      sessionHistory.forEach(item => addSessionHistoryItem(item)); // Display in original order to show most recent first
   }
 
   function saveSessionHistory(message) {
       const sessionHistory = JSON.parse(localStorage.getItem('sessionHistory')) || [];
-      sessionHistory.push(message);
+      sessionHistory.unshift(message); // Add new messages to the beginning
       localStorage.setItem('sessionHistory', JSON.stringify(sessionHistory));
-      console.log("Saved session history:", sessionHistory); // Debugging
+      console.log("Saved session history:", sessionHistory);
   }
 
-  // Event listener for page load
+  // Only end session when window is closed
+  window.addEventListener('beforeunload', (event) => {
+      saveSessionHistory(`Session ended at ${formatDateTime(new Date())}`);
+      console.log("Session end logged on window close.");
+  });
+
   document.addEventListener('DOMContentLoaded', () => {
       const pageName = window.location.pathname.split("/").pop();
       console.log("Page Name:", pageName);
 
       if (pageName.includes('home')) {
           saveSessionHistory(`Session started at ${formatDateTime(new Date())}`); // Log session start
-
+          console.log("Session start logged.");
       } else if (pageName.includes('settings')) {
           displaySessionHistory(); // Display session history when the settings page loads
-
-          document.getElementById('refreshButton').addEventListener('click', () => {
-              const sessionList = document.getElementById('sessionList');
-              if (!sessionList) {
-                  console.error("sessionList element not found on refresh");
-                  return;
-              }
-              sessionList.innerHTML = ''; // Clear current session list
-              console.log("Refreshing session history"); // Debugging
-              loadSessionHistory(); // Reload session history
-          });
 
           document.getElementById('clearButton').addEventListener('click', () => {
               localStorage.removeItem('sessionHistory');
@@ -298,16 +292,8 @@ loadPage('page1.html');
               if (sessionList) {
                   sessionList.innerHTML = ''; // Clear displayed session list
               }
-              console.log("Cleared session history"); // Debugging
+              console.log("Cleared session history");
           });
-      }
-  });
-
-  // Event listener for window close
-  window.addEventListener('beforeunload', (event) => {
-      if (window.location.pathname.includes('home') || window.location.pathname.includes('settings')) {
-          saveSessionHistory(`Session ended at ${formatDateTime(new Date())}`);
-          console.log("Session end logged on window close."); // Debugging
       }
   });
 

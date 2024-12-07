@@ -29,14 +29,15 @@
                 <span class="slider round"></span>
             </label>
         </div>
-        <div class="session-history-widget">
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+        <div class="session-log-box">
+            <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
             <div class="header">
                 <h3>Session Log</h3>
-                <button id="refreshButton"><i class="fas fa-sync-alt"></i> Refresh</button>
-                <button id="clearButton"><i class="fas fa-trash-alt"></i> Clear</button>
+                <button id="clearButton"><i class="fas fa-trash-alt"></i> Clear Log</button>
             </div>
-            <ul id="sessionList"></ul>
+            <ul id="sessionList">
+                <!-- Session history items will be dynamically inserted here -->
+            </ul>
         </div>
         <script src="base.js"></script>
     </section>
