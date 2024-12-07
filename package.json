@@ -13,7 +13,9 @@
     "electron": "^33.0.2"
   },
   "dependencies": {
+    "@kurkle/color": "^0.3.4",
     "axios": "^1.7.7",
+    "chart.js": "^4.4.7",
     "jwt-decode": "^3.1.2",
     "keytar": "^7.9.0"
   }

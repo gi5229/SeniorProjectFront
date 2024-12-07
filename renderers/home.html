@@ -5,8 +5,9 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <meta http-equiv="Content-Security-Policy" content="script-src 'self'">
+  <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'nonce-123456'">
   <title>Home - JNPJ Secure Cloud Storage</title>
+  
   <link rel="stylesheet" href="../CSS/main.css">
 </head>
 
@@ -39,11 +40,13 @@
   <!-- Dynamic content will be loaded here -->
 </main>
 
+
+
 <footer class="footer">
   <p>© 2024 JNPJ</p>
 </footer>
 
 </body>
 
-<script src="base.js"></script>
+<script nonce="123456" type="module" src="base.js"></script>
 </html>

@@ -207,7 +207,6 @@ function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-
 async function createDrive(driveName) {
   myConsole.log("Drive object name: " + driveName);
   try {
@@ -289,13 +288,11 @@ async function getMountedDrive() {
       }
 
       myConsole.log(null);
-      resolve(null);
+      return resolve({ letter: null, providerName: null, letters: mountedDrives.map(drive => drive.letter) });
     });
   });
 }
 
-
-//TODO: Check this function to make sure it is working correctly
 async function unmountDrive(driveLetter) {
   myConsole.log(`Unmounting drive: ${driveLetter}`);
   const command = `net use ${driveLetter}: /delete /y`;
@@ -311,7 +308,6 @@ async function unmountDrive(driveLetter) {
     myConsole.log(`Drive unmounted successfully: ${stdout}`);
   });
 }
-
 
 async function changeEmail(email) {
   try {
@@ -336,7 +332,6 @@ async function changeEmail(email) {
     //throw error;
   }
 }
-
 
 async function changePassword(password) {
   try {
@@ -384,7 +379,6 @@ async function mfaSetup() {
   }
 }
 
-
 async function logout() {
   await keytar.deletePassword(keytarService, keytarAccount);
   accessToken = null;
@@ -398,7 +392,6 @@ async function logout() {
   //createLogoutWindow();
 }
 
-// TODO: Add a popup to let the user know about the error and do not let them interact with the app, close the app after the popup is closed/confirmed
 function createLogoutWindow() {
   const logoutWindow = new BrowserWindow({
     show: false,
@@ -411,6 +404,18 @@ function createLogoutWindow() {
     logoutWindow.close();
   });
 }
+
+function getTotalUsage() {
+  return axios.post('http://localhost:3000/get-total-usage', {
+    drive: `jnpj/${profile.drive}`,
+  }, {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+    },
+  });
+}
+
+
 
 function getLogOutUrl() {
   return `https://${auth0Domain}/v2/logout`;
@@ -434,4 +439,5 @@ module.exports = {
   changeEmail,
   createLogoutWindow,
   getMountedDrive,
+  getTotalUsage,
 };

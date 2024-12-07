@@ -1,12 +1,22 @@
 <section id="files" class="section">
-    <h1>Mount A Drive</h1>
-    <h2>Drive List</h2>
     <div class="create-drive">
+        <h1>Create A Drive</h1>
         <input type="text" id="drive-name" placeholder="Drive Name">
         <button id="create-drive" class="btn black-text">Create Drive</button>
     </div>
-    <div class="dataset-container" id="dataset-container">
-        
+    <div class="drive-page">
+        <div class="drives">
+            <h2>Drive List</h2>
+            <div class="dataset-container" id="dataset-container">
+            </div>
+        </div>
+        <div class="usage-graph">
+            <h2>Total Usage</h2>
+            <div class="usage-graph-container">
+                <canvas id="usage-graph"></canvas>
+                
+            </div>
+        </div>
     </div>
 </section>
 

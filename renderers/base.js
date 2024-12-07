@@ -1,5 +1,13 @@
+
 var firstClick = true;
-let darkmode = localStorage.getItem('darkmode')
+let darkmode = localStorage.getItem('darkmode');
+const authService = require('../services/auth-service');
+const { Chart, registerables } = require('chart.js');
+
+const charts = {};
+
+// Register the components
+Chart.register(...registerables);
 
 function sleep(miliseconds) {
   var currentTime = new Date().getTime();
@@ -13,13 +21,13 @@ if (darkmode === 'active') {
 }
 
 addEventListener('load',async  () =>{
-  //const profile = await window.electronAPI.getProfile();
-  //document.getElementById('picture').src = profile.picture;
-  // document.getElementById('success').innerText = 'You successfully used OpenID Connect and OAuth 2.0 to authenticate.';
+  const profile = await authService.getProfile();
+  document.getElementById('picture').src = profile.picture;
+  //document.getElementById('success').innerText = 'You successfully used OpenID Connect and OAuth 2.0 to authenticate.';
 });
 
 document.getElementById('logout').onclick = () => {
-  window.electronAPI.createLogoutWindow();
+  authService.createLogoutWindow();
 };
 
 document.getElementById('hamburger-menu').addEventListener('click', function() {
@@ -27,11 +35,65 @@ document.getElementById('hamburger-menu').addEventListener('click', function() {
   document.getElementById('nav-profile').classList.toggle('open');
 });
 
+function getRandomColor() {
+  const letters = '0123456789ABCDEF';
+  let color = '#';
+  for (let i = 0; i < 6; i++) {
+    color += letters[Math.floor(Math.random() * 16)];
+  }
+  return color;
+}
+
+function generateBackgroundColors(numColors) {
+  const colors = [];
+  for (let i = 0; i < numColors; i++) {
+    colors.push(getRandomColor());
+  }
+  return colors;
+}
+
+function initializeChart(chartId, chartElement, chartLabels, chartData, backgroundColors = null, height = 200) {
+  if (!backgroundColors) {
+    backgroundColors = generateBackgroundColors(chartLabels.length);
+  }
+
+  if (charts[chartId]) {
+    charts[chartId].destroy(); // Destroy the existing chart instance
+  }
+
+  charts[chartId] = new Chart(chartElement, {
+    type: 'doughnut',
+    data: {
+      labels: chartLabels,
+      datasets: [{
+        label: 'GB',
+        data: chartData,
+        backgroundColor: backgroundColors,
+        hoverOffset: 4
+      }]
+    },
+    options: {
+      plugins: {
+        legend: {
+          labels: {
+            font: {
+              size: 16, // Set the font size for the labels
+            },
+            color: 'white' // Set the font color for the labels
+          }
+        }
+      }
+    }
+  });
+  charts[chartId].canvas.parentNode.style.height = `${height}px`;
+}
+
+
 async function initializeDatasets() {
     // reload the tokens
-    await window.electronAPI.refreshTokens();
+    await authService.refreshTokens();
 
-    const profile = await window.electronAPI.getProfile();
+    const profile = await authService.getProfile();
     const datasets = profile.datasets;
   
     const container = document.getElementById('dataset-container');
@@ -39,21 +101,33 @@ async function initializeDatasets() {
     container.innerHTML = '';
   
     // Check if any of the users datasets are already mounted
-    const mountedDrive = await window.electronAPI.getMountedDrive();
+    const mountedDrive = await authService.getMountedDrive();
+    const chartElement = document.getElementById('usage-graph').getContext('2d');
+    chartElement.innerHTML = "";
+    const chartLabels = ['Used', 'Free'];
+    // TODO: Get the actual data from the API
+    var totalUsage = await authService.getTotalUsage();
+    
+    //var totalUsage = 10000000000;
+    // Convert to GB from bits
+    totalUsage = totalUsage.data.used / 1024 / 1024 / 1024;
+    console.log('totalUsage: ', totalUsage);
+    var freeSpace = 5 - totalUsage;
+    const chartData = [totalUsage, freeSpace];
+    const chartColors = ['#FF6384', '#36A2EB'];
+    
+    initializeChart('usageChart', chartElement, chartLabels, chartData, chartColors, 500);
 
     
-  
+
     
-  
-  
     datasets.forEach((dataset, index) => {
-      if (mountedDrive && mountedDrive.providerName === dataset) {
+      if (mountedDrive.letter !== null && mountedDrive.providerName === dataset) {
         // If the dataset is already mounted, show a disconnect button instead
         const div = document.createElement('div');
-        div.className = 'create-drive';
+        div.className = 'select-drive';
         div.innerHTML = `
-            <span>${mountedDrive.letter}:</span>
-            <span>//${dataset}/</span>
+            <span class='letter'>${mountedDrive.letter}: //${dataset}/ </span>
             <button id="disconnect-${index}" class="disconnect-btn black-text">Disconnect</button>
         `;
         container.appendChild(div);
@@ -62,24 +136,25 @@ async function initializeDatasets() {
         // Add event listener for the disconnect button
         document.getElementById(`disconnect-${index}`).onclick = async () => {
           console.log(`Disconnecting from dataset: ${dataset} with drive letter: ${mountedDrive.letter}`);
-          await window.electronAPI.unmountDrive(mountedDrive.letter);
-          initializeDatasets();
+          await authService.unmountDrive(mountedDrive.letter);
+          loadPage('files.html', true);
         }
       } else {
         // Create a dropdown and button for each dataset
         const div = document.createElement('div');
-        div.className = 'create-drive';
+        div.className = 'select-drive';
         // Dont include the drive letter if it is in mountedDrive.letters
-        if(mountedDrive != null) {
+        if(mountedDrive.letters !== null) {
           console.log('index: ', index)
           div.innerHTML = `
-              <select id="drive-letter-${index}" class="black-text">
+              <select id="drive-letter-${index}" class="black-text letter">
                   ${Array.from({ length: 26 }, (_, i) => String.fromCharCode(65 + i))
                     .filter(letter => !mountedDrive.letters.includes(letter))
                     .map(letter => `<option value="${letter}" class="black-text">${letter}</option>`)
                     .join('')}
               </select>
-              <span>//${dataset}/</span>
+              <span id='dataset'>//${dataset}/</span>
+              <button id="delete-${index}" class="delete-btn black-text">Delete</button>
               <button id="connect-${index}" class="connect-btn black-text">Connect</button>
           `;
         } else {
@@ -90,7 +165,8 @@ async function initializeDatasets() {
                     .map(letter => `<option value="${letter}" class="black-text">${letter}</option>`)
                     .join('')}
               </select>
-              <span>//${dataset}/</span>
+              <span id='dataset'>//${dataset}/</span>
+              <button id="delete-${index}" class="delete-btn black-text">Delete</button>
               <button id="connect-${index}" class="connect-btn black-text">Connect</button>
           `;
         }
@@ -100,7 +176,7 @@ async function initializeDatasets() {
         document.getElementById(`connect-${index}`).onclick = () => {
           // Check if another drive is already mounted and unmount it first and wait for it to finish
           if (mountedDrive) {
-            window.electronAPI.unmountDrive(mountedDrive.letter);
+            authService.unmountDrive(mountedDrive.letter);
           }
           // Wait for 2 seconds to make sure the drive is unmounted before mounting a new one
           //sleep(2000);
@@ -108,8 +184,8 @@ async function initializeDatasets() {
           
           const selectedDriveLetter = document.getElementById(`drive-letter-${index}`).value;
           console.log(`Connecting to dataset: ${dataset} with drive letter: ${selectedDriveLetter}`);
-          window.electronAPI.mountDrive(selectedDriveLetter, profile.drive + '\\' + dataset);
-          initializeDatasets();
+          authService.mountDrive(selectedDriveLetter, profile.drive + '\\' + dataset);
+          loadPage('files.html', true);
         }
       }
   });
@@ -124,17 +200,19 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('settings-button').addEventListener('click', () => loadPage('settings.html'));
 });
 
-async function loadPage(page) {
+async function loadPage(page, skipAnimation = false) {
   const content = document.getElementById('content');
   const hamburger = document.getElementById('hamburger-menu');
   const navProfile = document.getElementById('nav-profile');
 
   if(firstClick == false){
-    const hamburger = document.getElementById('hamburger-menu');
-    const navProfile = document.getElementById('nav-profile');
+    if (skipAnimation !== true) {
+      const hamburger = document.getElementById('hamburger-menu');
+      const navProfile = document.getElementById('nav-profile');
 
-    hamburger.classList.toggle('active');
-    navProfile.classList.toggle('open');
+      hamburger.classList.toggle('active');
+      navProfile.classList.toggle('open');
+    }
   } else {
     firstClick = false;
   }
@@ -152,7 +230,7 @@ async function loadPage(page) {
     document.getElementById('create-drive').onclick = async () => {
       try {
         console.log('Creating a new drive: ' + document.getElementById('drive-name').value);
-        const response = await window.electronAPI.createDrive(document.getElementById('drive-name').value);
+        const response = await authService.createDrive(document.getElementById('drive-name').value);
         addDriveToList(document.getElementById('drive-name').value);
       } catch (error) {
         console.error('Error connecting to the API: ' + error);
@@ -179,13 +257,13 @@ async function loadPage(page) {
 
     document.getElementById('change-email').onclick = async () => {
       const newEmail = document.getElementById('new-email').value;
-      await window.electronAPI.changeEmail(newEmail);
+      await authService.changeEmail(newEmail);
     };
 
     
     document.getElementById('change-password').onclick = async () => {
       const newPassword = document.getElementById('new-password').value;
-      await window.electronAPI.changePassword(newPassword);
+      await authService.changePassword(newPassword);
     };
   };
 
@@ -210,7 +288,7 @@ function addDriveToList(driveName) {
   document.getElementById(`connect-${index}`).onclick = () => {
     const selectedDriveLetter = document.getElementById(`drive-letter-${index}`).value;
     console.log(`Connecting to dataset: ${driveName} with drive letter: ${selectedDriveLetter}`);
-    window.electronAPI.mountDrive(selectedDriveLetter, driveName);
+    authService.mountDrive(selectedDriveLetter, driveName);
   };
 }
 function enableDarkmode()  {

@@ -16,6 +16,8 @@ function createAppWindow() {
     webPreferences: {
       preload: path.join(__dirname, "preload.js"),
       overflow: 'hidden',
+      nodeIntegration: true,
+      contextIsolation: false,
     }
   });
 
@@ -24,7 +26,7 @@ function createAppWindow() {
   win.loadFile('./renderers/home.html');
 
   win.on('closed', () => {
-    // TODO: Dissconnect all mapped network drives
+    // TODO: Dissconnect all mapped network drives..... maybe
     win = null;
   });
 }
