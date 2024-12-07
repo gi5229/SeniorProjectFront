@@ -21,6 +21,8 @@ if (darkmode === 'active') {
 }
 
 addEventListener('load',async  () =>{
+  // reload the tokens
+  await authService.refreshTokens();
   const profile = await authService.getProfile();
   document.getElementById('picture').src = profile.picture;
   //document.getElementById('success').innerText = 'You successfully used OpenID Connect and OAuth 2.0 to authenticate.';
@@ -185,6 +187,13 @@ async function initializeDatasets() {
           const selectedDriveLetter = document.getElementById(`drive-letter-${index}`).value;
           console.log(`Connecting to dataset: ${dataset} with drive letter: ${selectedDriveLetter}`);
           authService.mountDrive(selectedDriveLetter, profile.drive + '\\' + dataset);
+          loadPage('files.html', true);
+        }
+
+        // Add event listener for the delete button
+        document.getElementById(`delete-${index}`).onclick = async () => {
+          console.log(`Deleting dataset: ${dataset}`);
+          await authService.deleteDrive(dataset);
           loadPage('files.html', true);
         }
       }

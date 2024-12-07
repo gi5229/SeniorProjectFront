@@ -416,6 +416,20 @@ function getTotalUsage() {
 }
 
 
+function deleteDrive(dataset) {
+  datasetFull = 'jnpj/' + profile.drive + '/' + dataset;
+  return axios.post('http://localhost:3000/delete-drive', {
+    drive: datasetFull,
+    dataset: dataset,
+    authUserId: profile.user_id,
+  }, {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+    },
+  });
+}
+
+
 
 function getLogOutUrl() {
   return `https://${auth0Domain}/v2/logout`;
@@ -440,4 +454,5 @@ module.exports = {
   createLogoutWindow,
   getMountedDrive,
   getTotalUsage,
+  deleteDrive,
 };
