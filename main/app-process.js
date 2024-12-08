@@ -23,7 +23,7 @@ function createAppWindow() {
 
   
 
-  win.loadFile('./renderers/home.html');
+  win.loadFile('./renderers/base.html');
 
   win.on('closed', () => {
     // TODO: Dissconnect all mapped network drives..... maybe

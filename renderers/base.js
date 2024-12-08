@@ -203,7 +203,7 @@ async function initializeDatasets() {
 
 
 document.addEventListener('DOMContentLoaded', () => {
-  document.getElementById('home-button').addEventListener('click', () => loadPage('page1.html'));
+  document.getElementById('home-button').addEventListener('click', () => loadPage('about.html'));
   document.getElementById('drives-button').addEventListener('click', () => loadPage('files.html'));
   document.getElementById('usage-button').addEventListener('click', () => loadPage('usage.html'));
   document.getElementById('settings-button').addEventListener('click', () => loadPage('settings.html'));
@@ -313,7 +313,7 @@ function disableDarkmode () {
 }
 
 // Load the initial page
-loadPage('page1.html');
+loadPage('about.html');
 
 
 
