@@ -415,6 +415,16 @@ function getTotalUsage() {
   });
 }
 
+function getDriveUsage(drive) {
+  return axios.post('http://localhost:3000/get-total-usage', {
+    drive: `jnpj/${profile.drive}/${drive}`,
+  }, {
+    headers: {
+      'Authorization': `Bearer ${accessToken}`,
+    },
+  });
+}
+
 
 function deleteDrive(dataset) {
   datasetFull = 'jnpj/' + profile.drive + '/' + dataset;
@@ -455,4 +465,5 @@ module.exports = {
   getMountedDrive,
   getTotalUsage,
   deleteDrive,
+  getDriveUsage,
 };

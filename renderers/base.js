@@ -4,7 +4,7 @@ let darkmode = localStorage.getItem('darkmode');
 const authService = require('../services/auth-service');
 const { Chart, registerables } = require('chart.js');
 
-const charts = {};
+const charts = [];
 
 // Register the components
 Chart.register(...registerables);
@@ -46,10 +46,34 @@ function getRandomColor() {
   return color;
 }
 
-function generateBackgroundColors(numColors) {
+function hexToRgb(hex) {
+  const bigint = parseInt(hex.slice(1), 16);
+  const r = (bigint >> 16) & 255;
+  const g = (bigint >> 8) & 255;
+  const b = bigint & 255;
+  return [r, g, b];
+}
+
+function colorDistance(color1, color2) {
+  const [r1, g1, b1] = hexToRgb(color1);
+  const [r2, g2, b2] = hexToRgb(color2);
+  return Math.sqrt(
+    (r1 - r2) ** 2 +
+    (g1 - g2) ** 2 +
+    (b1 - b2) ** 2
+  );
+}
+
+function generateBackgroundColors(numColors, minDistance = 100) {
   const colors = [];
-  for (let i = 0; i < numColors; i++) {
-    colors.push(getRandomColor());
+  while (colors.length < numColors) {
+    let color = getRandomColor();
+    let isSimilar = colors.some(existingColor => colorDistance(color, existingColor) < minDistance);
+    while (isSimilar) {
+      color = getRandomColor();
+      isSimilar = colors.some(existingColor => colorDistance(color, existingColor) < minDistance);
+    }
+    colors.push(color);
   }
   return colors;
 }
@@ -274,9 +298,93 @@ async function loadPage(page, skipAnimation = false) {
       const newPassword = document.getElementById('new-password').value;
       await authService.changePassword(newPassword);
     };
+  } else if (page === 'usage.html') {
+    // Get the data for the charts
+    await displayUsageCharts();
+
+    
   };
 
   content.classList.remove('fade-out');
+}
+
+async function displayUsageCharts() {
+  await authService.refreshTokens();
+  const profile = await authService.getProfile();
+  const datasets = profile.datasets;
+
+  var availableSpace = 5;
+  var totalUsage = await authService.getTotalUsage();
+  totalUsage = totalUsage.data.used / 1024 / 1024 / 1024;
+  var freeSpace = availableSpace - totalUsage;
+
+  const usageData = [];
+
+  // get drive usage for each dataset and store it in an array
+  for (const dataset of datasets) {
+    var usage = await authService.getDriveUsage(dataset);
+    var usageGB = usage.data.used / 1024 / 1024 / 1024;
+    // Store the usage in an array
+    usageData.push(usageGB);
+  }
+
+  console.log('usageData: ', usageData);
+
+  // get element by id totalSpace
+  document.getElementById('totalSpace').innerHTML = parseFloat(availableSpace.toFixed(1)) + ' GB';
+  document.getElementById('usedSpace').innerHTML = parseFloat(totalUsage.toFixed(1)) + ' GB';
+  document.getElementById('freeSpace').innerHTML = parseFloat(freeSpace.toFixed(1)) + ' GB';
+
+  // get element by id usage-graph
+  var chartElement = document.getElementById('total-usage-graph').getContext('2d');
+  var chartLabels = ['Used', 'Free'];
+  var chartData = [totalUsage, freeSpace];
+  var chartColors = ['#FF6384', '#36A2EB'];
+
+  await initializeChart('usageChart', chartElement, chartLabels, chartData, chartColors, null);
+
+  // Create elements for each dataset/usageData in the usage-summary-3 div
+  const summary = document.getElementById('usage-summary-3');
+  console.log('CHECK ME: ', usageData[0]);
+  for (var i = 0; i < datasets.length; i++) {
+    var div = document.createElement('div');
+    div.className = 'usage-graph-container-50';
+    div.innerHTML = `
+        <h2>Drive: ${datasets[i]}</h2>
+        <div class="container">
+          <canvas id="graph-${i}"></canvas>
+        </div>
+    `;
+    summary.appendChild(div);
+    var chartElement = document.getElementById(`graph-${i}`).getContext('2d');
+    var chartLabels = ['Free', `${datasets[i]}`];
+    console.log('usageData[i]: ', usageData[0]);
+    var chartData = [freeSpace, usageData[i]];
+
+    await initializeChart(`usageChart-${i}`, chartElement, chartLabels, chartData, null, null);
+  }
+
+
+
+
+  var chartElement2 = document.getElementById('breakdown-usage-graph').getContext('2d');
+  var datasets1 = [];
+  datasets.push('Free');
+
+  
+  
+  //datasets.push('Free');
+  usageData.push(freeSpace);
+
+  console.log('datasets: ', datasets1);
+  //console.log('usageData: ', usageData1);
+  
+  await initializeChart('breakdownChart', chartElement2, datasets, usageData, null, null);
+  
+
+  
+  
+
 }
 
 function addDriveToList(driveName) {

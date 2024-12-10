@@ -41,7 +41,13 @@ main {
 
 /* Navigation Styles */
 .navbar {
-    position: relative;
+    position: fixed;
+    justify-content: space-around;
+    width: 30px;
+    height: 30px;
+    left: 10px;
+    top: 75px;
+    z-index: 3; /* Ensure the hamburger button is on top */
 }
 
 .strip {
@@ -55,6 +61,7 @@ main {
 }
 
 .hamburger-menu {
+    position: fixed;
     display: flex;
     flex-direction: column;
     justify-content: space-around;
@@ -62,8 +69,7 @@ main {
     height: 30px;
     cursor: pointer;
     position: absolute;
-    left: 10px;
-    top: 10px;
+
     z-index: 3; /* Ensure the hamburger button is on top */
     transition: transform 0.3s ease;
 }
@@ -469,6 +475,7 @@ a:hover {
 
 
 .custom-title-bar {
+    position: fixed;
     display: inline-block;
     justify-content: space-between;
     align-items: center;
@@ -481,6 +488,9 @@ a:hover {
     z-index: 1000;
 }
 
+.content {
+    padding-top: 75px;
+}
 
 /* Dynamic Style */
 #content {
@@ -641,6 +651,36 @@ a:hover {
     margin-right: auto;
 }
 
+canvas {
+    width: 100%;
+    height: auto;
+    max-height: 500px;
+}
+
+.usage-summary-2, .usage-summary-3 {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-evenly;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.usage-graph-container-50 {
+    /* flex: 1 0 40%; */
+    background-color: var(--surface-color);
+    padding: 20px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    width: 49%;
+}
+
+.container {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 #about-section {
     align-items: center;
     margin-top: 20px;
@@ -651,6 +691,11 @@ a:hover {
     padding-bottom: 20px;
     padding-right: 20px;
 }
+
+/* .scrollable {
+    height: 100%;
+    overflow-y: scroll;
+} */
 
 #about-section h2, #about-section h3 {
     margin-top: 20px;
