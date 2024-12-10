@@ -28,9 +28,16 @@ addEventListener('load',async  () =>{
   //document.getElementById('success').innerText = 'You successfully used OpenID Connect and OAuth 2.0 to authenticate.';
 });
 
+async function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
 document.getElementById('logout').onclick = () => {
-  authService.createLogoutWindow();
+  loadPage('logout.html');
+  
 };
+
+
 
 document.getElementById('hamburger-menu').addEventListener('click', function() {
   this.classList.toggle('active');
@@ -303,6 +310,11 @@ async function loadPage(page, skipAnimation = false) {
     await displayUsageCharts();
 
     
+  } else if (page === 'logout.html') {
+    authService.logout();
+    delay(2000);
+   // close the window
+    window.close(); 
   };
 
   content.classList.remove('fade-out');

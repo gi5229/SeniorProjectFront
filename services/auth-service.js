@@ -386,7 +386,7 @@ async function logout() {
   refreshToken = null;
 
   // Close all windows
-  BrowserWindow.getAllWindows().forEach(window => window.close());
+  //BrowserWindow.getAllWindows().forEach(window => window.close());
 
   // Create the logout window
   //createLogoutWindow();
