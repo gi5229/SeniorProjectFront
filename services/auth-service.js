@@ -343,39 +343,26 @@ async function changePassword(password) {
         'Authorization': `Bearer ${accessToken}`,
       },
     });
-
-    if (data.status != 200) {
-      myConsole.log(data);
-      //throw new Error('Failed to create user in cloud storage. Please close and reopen the app, and try signing in. If this persists, please contact support at
-    }
   }
   catch (error) {
     myConsole.log(error);
   }
 }
 
-// TODO: Complete MFA setup function
-async function mfaSetup() {
+
+async function mfa(bool) {
   try {
-    const data = await axios.post('http://localhost:3000/mfa-setup', {
+    const data = await axios.post('http://localhost:3000/mfa', {
       uid: profile.user_id,
+      mfa: bool,
     }, {
       headers: {
         'Authorization': `Bearer ${accessToken}`,
       },
     });
-
-    if (data.status != 200) {
-      myConsole.log(data);
-      await createLogoutWindow();
-      //throw new Error('Failed to create user in cloud storage. Please close and reopen the app, and try signing in. If this persists, please contact support at
-    }
-  }
+  } 
   catch (error) {
     myConsole.log(error);
-    myConsole.log(error.status);
-    await createLogoutWindow();
-    //throw error;
   }
 }
 
@@ -425,7 +412,6 @@ function getDriveUsage(drive) {
   });
 }
 
-
 function deleteDrive(dataset) {
   datasetFull = 'jnpj/' + profile.drive + '/' + dataset;
   return axios.post('http://localhost:3000/delete-drive', {
@@ -438,8 +424,6 @@ function deleteDrive(dataset) {
     },
   });
 }
-
-
 
 function getLogOutUrl() {
   return `https://${auth0Domain}/v2/logout`;
@@ -466,4 +450,5 @@ module.exports = {
   getTotalUsage,
   deleteDrive,
   getDriveUsage,
+  mfa,
 };

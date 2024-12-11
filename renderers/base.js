@@ -22,6 +22,7 @@ if (darkmode === 'active') {
 
 addEventListener('load',async  () =>{
   // reload the tokens
+  delay(10000);
   await authService.refreshTokens();
   const profile = await authService.getProfile();
   document.getElementById('picture').src = profile.picture;
@@ -241,6 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 async function loadPage(page, skipAnimation = false) {
+  
   const content = document.getElementById('content');
   const hamburger = document.getElementById('hamburger-menu');
   const navProfile = document.getElementById('nav-profile');
@@ -277,6 +279,7 @@ async function loadPage(page, skipAnimation = false) {
       }
     };
   } else if (page === 'settings.html') {
+    const profile = await authService.getProfile();
     var slider = document.getElementById('color-slider');
 
     if(localStorage.getItem('darkmode') === 'active') {
@@ -284,6 +287,14 @@ async function loadPage(page, skipAnimation = false) {
     } else {
       slider.checked = false;
     }
+
+    if(profile.use_mfa) {
+      document.getElementById('mfa-slider').checked = true;
+    } else {
+      document.getElementById('mfa-slider').checked = false;
+    }
+
+
   
     document.getElementById('color-slider').addEventListener("change", function() {
 
@@ -293,6 +304,15 @@ async function loadPage(page, skipAnimation = false) {
         disableDarkmode()
       }
     });
+
+    document.getElementById('mfa-slider').addEventListener("change", async function() {
+      if (this.checked) {
+        await authService.mfa(true);
+      } else {
+        await authService.mfa(false);
+      }
+    });
+
     
 
     document.getElementById('change-email').onclick = async () => {
